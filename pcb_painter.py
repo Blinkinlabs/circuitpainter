@@ -179,6 +179,14 @@ class PCB_Painter:
         self.draw_layer = "F_Cu"
         self.draw_fill = False
 
+    def save(self,filename):
+        """ Save the board design to a KiCad board file
+
+        filename: File name to write to
+        """
+
+        self.pcb.Save(f"{filename}.kicad_pcb")
+
     def width(self,width):
         """ Set the width to use for drawing commands
 
@@ -275,7 +283,7 @@ class PCB_Painter:
             self.pcb.Add(net)
 
         return net
-    
+
     def track(self,x1,y1,x2,y2,net=None):
         """ Place a PCB track
     
@@ -286,15 +294,51 @@ class PCB_Painter:
     
         track = pcbnew.PCB_TRACK(self.pcb)
         track.SetWidth(pcbnew.FromMM(self.draw_width))
+        track.SetLayer(self.layers[self.draw_layer])
         track.SetStart(self._localToWorld(x1,y1))
         track.SetEnd(self._localToWorld(x2,y2))
-        track.SetLayer(self.layers[self.draw_layer])
         if net != None:
             track.SetNet(self._findNet(net))
 
         self.pcb.Add(track)
         return track
     
+    def arcTrack(self,x,y,radius,start,end,net=None):
+        """ Draw an arc-shaped PCB track
+
+        Note that arc-shaped tracks are a little weirder than normal arcs. The
+        DRC engine expects them to be connected at both ends (like a normal
+        track), and the PCB Editor considers it a DRC violation to place
+        certain objects (like vias) on them.
+
+        x,y: center of arc (mm)
+        radius: arc radius (mm)
+        start: starting angle of arc (degrees)
+        end: ending angle of arc (degrees)
+        net: (optional) Net to connect track to
+        """
+        start_x = x + radius*math.cos(math.radians(start))
+        start_y = y + radius*math.sin(math.radians(start))
+
+        mid_angle = (end-start)/2+start
+        mid_x = x + radius*math.cos(math.radians(mid_angle))
+        mid_y = y + radius*math.sin(math.radians(mid_angle))
+
+        end_x = x + radius*math.cos(math.radians(end))
+        end_y = y + radius*math.sin(math.radians(end))
+
+        track = pcbnew.PCB_ARC(self.pcb)
+        track.SetWidth(pcbnew.FromMM(self.draw_width))
+        track.SetLayer(self.layers[self.draw_layer])
+        track.SetStart(self._localToWorld(start_x,start_y))
+        track.SetMid(self._localToWorld(mid_x,mid_y))
+        track.SetEnd(self._localToWorld(end_x,end_y))
+        if net != None:
+            track.SetNet(self._findNet(net))
+
+        self.pcb.Add(track)
+        return track
+
     def via(self,x,y,net=None,d=.3,w=.6):
         """ Place a via
     
@@ -326,8 +370,8 @@ class PCB_Painter:
         v = pcbnew.VECTOR_VECTOR2I(p_world)
     
         zone = pcbnew.ZONE(self.pcb)
-        zone.AddPolygon(v)
         zone.SetLayer(self.layers[self.draw_layer])
+        zone.AddPolygon(v)
         if net != None:
             zone.SetNet(self._findNet(net))
     
@@ -345,6 +389,29 @@ class PCB_Painter:
         """
     
         points = [[x1,y1],[x1,y2],[x2,y2],[x2,y1]]
+        return self.polyZone(points,net)
+
+    def circleZone(self,x,y,radius,net=None):
+        """ Place a circular zone
+    
+        Zones can be placed on both copper and non-copper layers
+
+        Note that the zone is made of a line segments that approximate the
+        circle.
+    
+        x,y: center of circle (mm)
+        radius: radius of circle (mm)
+        net: (optional) net to connect rectangle to
+        """
+   
+        resolution = 0.5 # approximation resolution, in mm
+
+        c = 2*math.pi*radius
+        segments = int(c/resolution)
+
+        angles = [s/segments*2*math.pi for s in range(0,segments)]
+        points = [[x+math.cos(a),y+math.sin(a)] for a in angles]
+
         return self.polyZone(points,net)
    
     def footprint(self,x,y,library,name,reference=None,angle=0,nets=None):
@@ -382,7 +449,7 @@ class PCB_Painter:
 
         if nets != None:
             if len(nets) != len(footprint.Pads()):
-                print(f'Incorrect number of nets provided, expected:{len(nets)} got:{len(footprint.Pads())}')
+                print(f'Incorrect number of nets provided, expected:{len(footprint.Pads())} got:{len(nets)}')
                 exit(1)
 
             for net, pad in zip(nets, footprint.Pads()):
@@ -423,9 +490,9 @@ class PCB_Painter:
         """
         line = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_SEGMENT)
         line.SetWidth(pcbnew.FromMM(self.draw_width))
+        line.SetLayer(self.layers[self.draw_layer])
         line.SetStart(self._localToWorld(x1,y1))
         line.SetEnd(self._localToWorld(x2,y2))
-        line.SetLayer(self.layers[self.draw_layer])
     
         self.pcb.Add(line)
         return line
@@ -444,13 +511,12 @@ class PCB_Painter:
         start_x = x + radius*math.cos(math.radians(start))
         start_y = y + radius*math.sin(math.radians(start))
 
-
         arc = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_ARC)
         arc.SetWidth(pcbnew.FromMM(self.draw_width))
+        arc.SetLayer(self.layers[self.draw_layer])
         arc.SetCenter(self._localToWorld(x,y))
         arc.SetStart(self._localToWorld(start_x,start_y))
         arc.SetArcAngleAndEnd(pcbnew.EDA_ANGLE(end-start, pcbnew.DEGREES_T))
-        arc.SetLayer(self.layers[self.draw_layer])
     
         self.pcb.Add(arc)
         return arc
@@ -465,13 +531,13 @@ class PCB_Painter:
         radius: radius of circle (mm)
         """
         circle = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_CIRCLE)
+        circle.SetWidth(pcbnew.FromMM(self.draw_width))
+        circle.SetLayer(self.layers[self.draw_layer])
+        circle.SetFilled(self.draw_fill)
         circle.SetCenter(self._localToWorld(x,y))
         # Note: there isn't a SetRadius() function
         circle.SetStart(self._localToWorld(x,y))
         circle.SetEnd(self._localToWorld(x,y+radius))
-        circle.SetLayer(self.layers[self.draw_layer])
-        circle.SetWidth(pcbnew.FromMM(self.draw_width))
-        circle.SetFilled(self.draw_fill)
     
         self.pcb.Add(circle)
         return circle
@@ -488,10 +554,10 @@ class PCB_Painter:
         v = pcbnew.VECTOR_VECTOR2I(points_world)
 
         poly = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_POLY)
-        poly.SetPolyPoints(v)
-        poly.SetLayer(self.layers[self.draw_layer])
         poly.SetWidth(pcbnew.FromMM(self.draw_width))
+        poly.SetLayer(self.layers[self.draw_layer])
         poly.SetFilled(self.draw_fill)
+        poly.SetPolyPoints(v)
     
         self.pcb.Add(poly)
         return poly
@@ -524,10 +590,10 @@ class PCB_Painter:
         """
 
         text = pcbnew.PCB_TEXT(self.pcb)
+        text.SetLayer(self.layers[self.draw_layer])
         text.SetText(message)
         text.SetTextPos(self._localToWorld(x,y))
         text.SetTextAngle(pcbnew.EDA_ANGLE(self.transform.getAngle(), pcbnew.DEGREES_T))
-        text.SetLayer(self.layers[self.draw_layer])
         text.SetMirrored(mirrored)
         text.SetBold(bold)
         text.SetItalic(italic)

@@ -96,6 +96,6 @@ def asterix(arms,leds_per_arm):
 
         painter.popMatrix()
 
-    painter.pcb.Save("asterix.kicad_pcb")
+    painter.save("asterix")
 
 asterix(25,12)
