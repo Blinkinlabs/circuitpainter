@@ -1,0 +1,16 @@
+[build-system]
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "pcb_painter"
+authors = [{name = "Matthew Mets", email = "matt@blinkinlabs.com"}]
+license = {file = "LICENSE"}
+classifiers = ["License :: OSI Approved :: MIT License"]
+dynamic = ["version", "description"]
+keywords = ["kicad", "pcb", "printed ciruit board","circuit design","skectching"]
+dependencies = ["numpy"]
+readme = "README.md"
+
+[project.urls]
+Home = "https://github.com/blinkinlabs/pcb_painter"
