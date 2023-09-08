@@ -1,7 +1,7 @@
-from pcb_painter import PCB_Painter
+from pcb_painter import PcbPainter
 
 # Create a new PCB Painter
-painter = PCB_Painter()
+painter = PcbPainter()
 
 # Start drawing at position 50, 50 on the circuit board canvas, so that it
 # fits in the sheet nicely.
@@ -18,9 +18,9 @@ painter.rect(-spacing,-spacing,(cols)*spacing,(rows)*spacing)
 
 
 painter.layer("F_Cu")
-painter.rectZone(-spacing,-spacing,(cols)*spacing,(rows)*spacing,"vbat")
+painter.rect_zone(-spacing,-spacing,(cols)*spacing,(rows)*spacing,"vbat")
 painter.layer("B_Cu")
-painter.rectZone(-spacing,-spacing,(cols)*spacing,(rows)*spacing,"gnd")
+painter.rect_zone(-spacing,-spacing,(cols)*spacing,(rows)*spacing,"gnd")
 
 painter.layer("F_Cu")
 painter.width(.4)
@@ -30,25 +30,25 @@ for col in range(0,cols):
         y = row*spacing
 
         painter.via(x,y,"gnd")
-        zone=painter.circleZone(x,y,3,"gnd")
+        zone=painter.circle_zone(x,y,3,"gnd")
         zone.SetAssignedPriority(1)
 
         if row == 0 and col%2 == 0:
-            painter.arcTrack(x,y,spacing/2,180,270+180)
+            painter.arc_track(x,y,spacing/2,180,270+180)
 
         if row == rows - 1 and col%2 == 0:
-            painter.arcTrack(x,y,spacing/2,0,270)
+            painter.arc_track(x,y,spacing/2,0,270)
 
         elif row == rows - 1 and col%2 == 1:
-            painter.arcTrack(x,y,spacing/2,180,270)
+            painter.arc_track(x,y,spacing/2,180,270)
 
         elif row == 0 and col%2 == 1:
-            painter.arcTrack(x,y,spacing/2,0,90)
+            painter.arc_track(x,y,spacing/2,0,90)
 
         elif row%2 == 0:
-            painter.arcTrack(x,y,spacing/2,270,270+180)
+            painter.arc_track(x,y,spacing/2,270,270+180)
 
         else:
-            painter.arcTrack(x,y,spacing/2,90,270)
+            painter.arc_track(x,y,spacing/2,90,270)
 
 painter.save("arc_test")

@@ -35,7 +35,7 @@ class _TransformMatrix():
         else:
             self.reset()
 
-    def getAngle(self):
+    def get_angle(self):
         """ Get the current rotation angle from the transform
 
         We restrict the transform to translate/rotate only, so angle is well
@@ -92,7 +92,7 @@ class _TransformMatrix():
         return float(result[0]), float(result[1])
 
 
-class PCB_Painter:
+class PcbPainter:
     # Board layers, from pcbnew
     layers = {
         "F_Cu": pcbnew.F_Cu,
@@ -226,7 +226,7 @@ class PCB_Painter:
         """
         self.draw_fill = True
 
-    def noFill(self):
+    def no_fill(self):
         """ Disable fills for drawing commands
 
         Drawing objects such as circles, rectangles, and polygons will have
@@ -238,15 +238,15 @@ class PCB_Painter:
         """ Enable silkscreen reference designtors for placed footprints """
         self.show_reference_designators = True
 
-    def noDesignators(self):
+    def no_designators(self):
         """ Disable silkscreen reference designtors for placed footprints """
         self.show_reference_designators = False
 
-    def pushMatrix(self):
+    def push_matrix(self):
         """ Save the state of the current transformation matrix """
         self.transform.push()
 
-    def popMatrix(self):
+    def pop_matrix(self):
         """ Restore the state of the last transformation matrix """
         self.transform.pop()
 
@@ -266,17 +266,17 @@ class PCB_Painter:
 
         self.transform.rotate(angle)
 
-    def _localToWorld(self, x, y):
+    def _local_to_world(self, x, y):
         """ Convert a local coordinate in mm, to a board coordinate """
         xp, yp = self.transform.project(x, y)
         return pcbnew.VECTOR2I_MM(round(xp, 3), round(yp, 3))
 
-    def _worldToLocal(self, x, y):
+    def _world_to_local(self, x, y):
         """ Convert a board coordinate, to a local coordinate in mm """
         absolute = pcbnew.ToMM(pcbnew.VECTOR2I(x, y))
         return self.transform.inverse_project(*absolute)
 
-    def _addItem(self, item):
+    def _add_item(self, item):
         """ Add an item to the PCB
 
         item: Item to add
@@ -286,7 +286,7 @@ class PCB_Painter:
         self.uuids.append(item.m_Uuid)
         return item
 
-    def getObjectPosition(self, o):
+    def get_object_position(self, o):
         """ Get a local coordinate for a PCB object
 
         Can be a pad, footprint, etc
@@ -294,9 +294,9 @@ class PCB_Painter:
         o: Object to find coordinate for
         """
 
-        return self._worldToLocal(*o.GetPosition())
+        return self._world_to_local(*o.GetPosition())
 
-    def _findNet(self, name):
+    def _find_net(self, name):
         """ Find an electical net
 
         Electrical nets are used to connect conductive parts (tracks, vias,
@@ -329,14 +329,14 @@ class PCB_Painter:
         track = pcbnew.PCB_TRACK(self.pcb)
         track.SetWidth(pcbnew.FromMM(self.draw_width))
         track.SetLayer(self.layers[self.draw_layer])
-        track.SetStart(self._localToWorld(x1, y1))
-        track.SetEnd(self._localToWorld(x2, y2))
+        track.SetStart(self._local_to_world(x1, y1))
+        track.SetEnd(self._local_to_world(x2, y2))
         if net is not None:
-            track.SetNet(self._findNet(net))
+            track.SetNet(self._find_net(net))
 
-        return self._addItem(track)
+        return self._add_item(track)
 
-    def arcTrack(self, x, y, radius, start, end, net=None):
+    def arc_track(self, x, y, radius, start, end, net=None):
         """ Draw an arc-shaped PCB track
 
         Note that arc-shaped tracks are a little weirder than normal arcs. The
@@ -363,13 +363,13 @@ class PCB_Painter:
         track = pcbnew.PCB_ARC(self.pcb)
         track.SetWidth(pcbnew.FromMM(self.draw_width))
         track.SetLayer(self.layers[self.draw_layer])
-        track.SetStart(self._localToWorld(start_x, start_y))
-        track.SetMid(self._localToWorld(mid_x, mid_y))
-        track.SetEnd(self._localToWorld(end_x, end_y))
+        track.SetStart(self._local_to_world(start_x, start_y))
+        track.SetMid(self._local_to_world(mid_x, mid_y))
+        track.SetEnd(self._local_to_world(end_x, end_y))
         if net is not None:
-            track.SetNet(self._findNet(net))
+            track.SetNet(self._find_net(net))
 
-        return self._addItem(track)
+        return self._add_item(track)
 
     def via(self, x, y, net=None, d=.3, w=.6):
         """ Place a via
@@ -381,15 +381,15 @@ class PCB_Painter:
         """
 
         via = pcbnew.PCB_VIA(self.pcb)
-        via.SetPosition(self._localToWorld(x, y))
+        via.SetPosition(self._local_to_world(x, y))
         via.SetDrill(pcbnew.FromMM(d))
         via.SetWidth(pcbnew.FromMM(w))
         if net is not None:
-            via.SetNet(self._findNet(net))
+            via.SetNet(self._find_net(net))
 
-        return self._addItem(via)
+        return self._add_item(via)
 
-    def polyZone(self, points, net=None):
+    def poly_zone(self, points, net=None):
         """ Place a polygonal zone
 
         Zones can be placed on both copper and non-copper layers
@@ -397,18 +397,18 @@ class PCB_Painter:
         points: List of x,y coordinates that make up the polygon (mm)
         net: (optional) net to connect zone to.
         """
-        p_world = [self._localToWorld(point[0], point[1]) for point in points]
+        p_world = [self._local_to_world(point[0], point[1]) for point in points]
         v = pcbnew.VECTOR_VECTOR2I(p_world)
 
         zone = pcbnew.ZONE(self.pcb)
         zone.SetLayer(self.layers[self.draw_layer])
         zone.AddPolygon(v)
         if net is not None:
-            zone.SetNet(self._findNet(net))
+            zone.SetNet(self._find_net(net))
 
-        return self._addItem(zone)
+        return self._add_item(zone)
 
-    def rectZone(self, x1, y1, x2, y2, net=None):
+    def rect_zone(self, x1, y1, x2, y2, net=None):
         """ Place a rectangular zone
 
         Zones can be placed on both copper and non-copper layers
@@ -419,9 +419,9 @@ class PCB_Painter:
         """
 
         points = [[x1, y1], [x1, y2], [x2, y2], [x2, y1]]
-        return self.polyZone(points, net)
+        return self.poly_zone(points, net)
 
-    def circleZone(self, x, y, radius, net=None):
+    def circle_zone(self, x, y, radius, net=None):
         """ Place a circular zone
 
         Zones can be placed on both copper and non-copper layers
@@ -442,7 +442,7 @@ class PCB_Painter:
         angles = [s / segments * 2 * math.pi for s in range(0, segments)]
         points = [[x + math.cos(a), y + math.sin(a)] for a in angles]
 
-        return self.polyZone(points, net)
+        return self.poly_zone(points, net)
 
     def footprint(
             self,
@@ -482,11 +482,11 @@ class PCB_Painter:
 
         footprint = pcbnew.FootprintLoad(
             self.library_base + library + ".pretty", name)
-        footprint.SetPosition(self._localToWorld(x, y))
+        footprint.SetPosition(self._local_to_world(x, y))
         footprint.SetOrientation(
             pcbnew.EDA_ANGLE(
                 angle +
-                self.transform.getAngle(),
+                self.transform.get_angle(),
                 pcbnew.DEGREES_T))
         footprint.SetReference(reference)
         footprint.Reference().SetVisible(self.show_reference_designators)
@@ -498,11 +498,11 @@ class PCB_Painter:
                 exit(1)
 
             for net, pad in zip(nets, footprint.Pads()):
-                pad.SetNet(self._findNet(net))
+                pad.SetNet(self._find_net(net))
 
-        return self._addItem(footprint)
+        return self._add_item(footprint)
 
-    def getPads(self, reference):
+    def get_pads(self, reference):
         """ Get a list of the pads in the specified footprint
 
         reference: Reference designator to retrieve pads from. For example:
@@ -534,10 +534,10 @@ class PCB_Painter:
         line = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_SEGMENT)
         line.SetWidth(pcbnew.FromMM(self.draw_width))
         line.SetLayer(self.layers[self.draw_layer])
-        line.SetStart(self._localToWorld(x1, y1))
-        line.SetEnd(self._localToWorld(x2, y2))
+        line.SetStart(self._local_to_world(x1, y1))
+        line.SetEnd(self._local_to_world(x2, y2))
 
-        return self._addItem(line)
+        return self._add_item(line)
 
     def arc(self, x, y, radius, start, end):
         """ Draw an arc
@@ -560,11 +560,11 @@ class PCB_Painter:
         arc = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_ARC)
         arc.SetWidth(pcbnew.FromMM(self.draw_width))
         arc.SetLayer(self.layers[self.draw_layer])
-        arc.SetCenter(self._localToWorld(x, y))
-        arc.SetStart(self._localToWorld(start_x, start_y))
-        arc.SetEnd(self._localToWorld(end_x, end_y))
+        arc.SetCenter(self._local_to_world(x, y))
+        arc.SetStart(self._local_to_world(start_x, start_y))
+        arc.SetEnd(self._local_to_world(end_x, end_y))
 
-        return self._addItem(arc)
+        return self._add_item(arc)
 
     def circle(self, x, y, radius):
         """ Draw a circle
@@ -579,12 +579,12 @@ class PCB_Painter:
         circle.SetWidth(pcbnew.FromMM(self.draw_width))
         circle.SetLayer(self.layers[self.draw_layer])
         circle.SetFilled(self.draw_fill)
-        circle.SetCenter(self._localToWorld(x, y))
+        circle.SetCenter(self._local_to_world(x, y))
         # Note: there isn't a SetRadius() function
-        circle.SetStart(self._localToWorld(x, y))
-        circle.SetEnd(self._localToWorld(x, y + radius))
+        circle.SetStart(self._local_to_world(x, y))
+        circle.SetEnd(self._local_to_world(x, y + radius))
 
-        return self._addItem(circle)
+        return self._add_item(circle)
 
     def poly(self, points):
         """ Draw a polygon
@@ -595,7 +595,7 @@ class PCB_Painter:
         points: List of points to add to the polygon (mm)
         """
         points_world = [
-            self._localToWorld(
+            self._local_to_world(
                 point[0],
                 point[1]) for point in points]
         v = pcbnew.VECTOR_VECTOR2I(points_world)
@@ -606,7 +606,7 @@ class PCB_Painter:
         poly.SetFilled(self.draw_fill)
         poly.SetPolyPoints(v)
 
-        return self._addItem(poly)
+        return self._add_item(poly)
 
     def rect(self, x1, y1, x2, y2):
         """ Draw a rectangle
@@ -652,10 +652,10 @@ class PCB_Painter:
         text = pcbnew.PCB_TEXT(self.pcb)
         text.SetLayer(self.layers[self.draw_layer])
         text.SetText(message)
-        text.SetTextPos(self._localToWorld(x, y))
+        text.SetTextPos(self._local_to_world(x, y))
         text.SetTextAngle(
             pcbnew.EDA_ANGLE(
-                self.transform.getAngle() +
+                self.transform.get_angle() +
                 angle,
                 pcbnew.DEGREES_T))
         text.SetMirrored(mirrored)
@@ -663,4 +663,4 @@ class PCB_Painter:
         text.SetItalic(italic)
         text.SetIsKnockout(knockout)
 
-        return self._addItem(text)
+        return self._add_item(text)

@@ -1,8 +1,8 @@
-from pcb_painter import PCB_Painter
+from pcb_painter import PcbPainter
 import math
 
 def asterix(arms,leds_per_arm):
-    painter = PCB_Painter()
+    painter = PcbPainter()
 
     # Start drawing at a nicer location
     painter.translate(100,100)
@@ -22,15 +22,15 @@ def asterix(arms,leds_per_arm):
         points.append([x,y])
 
     painter.layer("F_Cu")
-    painter.polyZone(points,net="5V")
+    painter.poly_zone(points,net="5V")
     painter.layer("B_Cu")
-    painter.polyZone(points,net="gnd")
+    painter.poly_zone(points,net="gnd")
 
     led_num = 1
 
     # Step through arms backwards, to make data routing cleaner
     for arm in range(arms-1,-1,-1):
-        painter.pushMatrix()
+        painter.push_matrix()
         painter.rotate(arm/arms*360)
         painter.translate(center_diameter,0)
 
@@ -43,9 +43,9 @@ def asterix(arms,leds_per_arm):
 
         # Draw power and ground rects
         painter.layer("F_Cu")
-        painter.rectZone(0,-arm_width/2,arm_length,arm_width/2,net="5V")
+        painter.rect_zone(0,-arm_width/2,arm_length,arm_width/2,net="5V")
         painter.layer("B_Cu")
-        painter.rectZone(0,-arm_width/2,arm_length,arm_width/2,net="gnd")
+        painter.rect_zone(0,-arm_width/2,arm_length,arm_width/2,net="gnd")
 
         arm_led_nums = []
 
@@ -61,7 +61,7 @@ def asterix(arms,leds_per_arm):
                               )
            
             # Add a ground via under the LED
-            gnd_pad = painter.getObjectPosition(painter.getPads(f"LED{led_num}")[2])
+            gnd_pad = painter.get_object_position(painter.get_pads(f"LED{led_num}")[2])
             painter.track(gnd_pad[0],gnd_pad[1],gnd_pad[0]+1.5,gnd_pad[1])
             painter.via(gnd_pad[0]+1.5,gnd_pad[1])
 
@@ -70,31 +70,31 @@ def asterix(arms,leds_per_arm):
 
         # Connect data lines between LEDs on arm
         for a,b in zip(arm_led_nums[:-1],arm_led_nums[1:]):
-            src_pad = painter.getObjectPosition(painter.getPads(f"LED{a}")[1])
-            dest_pad = painter.getObjectPosition(painter.getPads(f"LED{b}")[3])
+            src_pad = painter.get_object_position(painter.get_pads(f"LED{a}")[1])
+            dest_pad = painter.get_object_position(painter.get_pads(f"LED{b}")[3])
             painter.track(src_pad[0],src_pad[1],dest_pad[0],dest_pad[1])
 
         # Bring first data line back to asterix center
-        first_pad = painter.getObjectPosition(painter.getPads(f"LED{arm_led_nums[0]}")[3])
+        first_pad = painter.get_object_position(painter.get_pads(f"LED{arm_led_nums[0]}")[3])
         painter.track(first_pad[0],first_pad[1],first_pad[0],arm_width/2-1)
         painter.track(first_pad[0],arm_width/2-1,-1,arm_width/2-1)
 
         # Connect previous data line
         if arm != arms-1:
-            last_local = painter._worldToLocal(lastDataCoord[0],lastDataCoord[1])
+            last_local = painter._world_to_local(lastDataCoord[0],lastDataCoord[1])
             painter.track(last_local[0],last_local[1],-1,arm_width/2-1)
 
 
         # Bring final data line back to asterix center
         if arm != 0:
-            last_pad = painter.getObjectPosition(painter.getPads(f"LED{arm_led_nums[-1]}")[1])
+            last_pad = painter.get_object_position(painter.get_pads(f"LED{arm_led_nums[-1]}")[1])
             painter.track(last_pad[0],last_pad[1],last_pad[0],-arm_width/2+1)
             painter.track(last_pad[0],-arm_width/2+1,-1,-arm_width/2+1)
-            lastDataCoord = painter._localToWorld(-1,-arm_width/2+1)
+            lastDataCoord = painter._local_to_world(-1,-arm_width/2+1)
 
 
 
-        painter.popMatrix()
+        painter.pop_matrix()
 
     painter.save("asterix")
 

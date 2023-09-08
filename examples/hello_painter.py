@@ -1,7 +1,7 @@
-from pcb_painter import PCB_Painter
+from pcb_painter import PcbPainter
 
 # Create a new PCB Painter
-painter = PCB_Painter()
+painter = PcbPainter()
 
 # Start drawing at position 50, 50 on the circuit board canvas, so that it
 # fits in the sheet nicely.
@@ -12,9 +12,9 @@ painter.layer("Edge_Cuts")
 painter.rect(0,0,50,20)
 
 painter.layer("F_Cu")
-painter.rectZone(0,0,50,20,"vbat")
+painter.rect_zone(0,0,50,20,"vbat")
 painter.layer("B_Cu")
-painter.rectZone(0,0,50,20,"gnd")
+painter.rect_zone(0,0,50,20,"gnd")
 
 
 # Add a battery to the PCB
