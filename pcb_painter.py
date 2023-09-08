@@ -180,6 +180,7 @@ class PCB_Painter:
         self.draw_width = 0.1
         self.draw_layer = "F_Cu"
         self.draw_fill = False
+        self.show_reference_designators = True
 
         # Put all generated items into a group, to make them easier to
         # identify.
@@ -230,6 +231,14 @@ class PCB_Painter:
         their fill property set to false.
         """
         self.draw_fill = False
+
+    def designators(self):
+        """ Enable silkscreen reference designtors for placed footprints """
+        self.show_reference_designators = True
+
+    def noDesignators(self):
+        """ Disable silkscreen reference designtors for placed footprints """
+        self.show_reference_designators = False
 
     def pushMatrix(self):
         """ Save the state of the current transformation matrix """
@@ -466,6 +475,7 @@ class PCB_Painter:
         footprint.SetPosition(self._localToWorld(x,y))
         footprint.SetOrientation(pcbnew.EDA_ANGLE(angle+self.transform.getAngle(), pcbnew.DEGREES_T))
         footprint.SetReference(reference)
+        footprint.Reference().SetVisible(self.show_reference_designators)
 
         if nets != None:
             if len(nets) != len(footprint.Pads()):
@@ -597,7 +607,7 @@ class PCB_Painter:
         points = [[x1,y1],[x1,y2],[x2,y2],[x2,y1]]
         return self.poly(points)
 
-    def text(self,x,y,message,mirrored=False,bold=False,italic=False,knockout=False):
+    def text(self,x,y,message,angle=0,mirrored=False,bold=False,italic=False,knockout=False):
         """ Draw text
 
         Text is is a graphical object, and can be used to make a cutout in
@@ -606,13 +616,18 @@ class PCB_Painter:
         x: x coordinate to place text (mm)
         y: y coordinate to place text (mm)
         message: Text string to display (single line only)
+        angle: angle to rotate text (degrees)
+        mirrored: If true, draw text backwards
+        bold: If true, use a bold font
+        italic: If true, use an italic font
+        knockout: If true, draw the text as a filled rect with the text cut from the rectangle
         """
 
         text = pcbnew.PCB_TEXT(self.pcb)
         text.SetLayer(self.layers[self.draw_layer])
         text.SetText(message)
         text.SetTextPos(self._localToWorld(x,y))
-        text.SetTextAngle(pcbnew.EDA_ANGLE(self.transform.getAngle(), pcbnew.DEGREES_T))
+        text.SetTextAngle(pcbnew.EDA_ANGLE(self.transform.getAngle()+angle, pcbnew.DEGREES_T))
         text.SetMirrored(mirrored)
         text.SetBold(bold)
         text.SetItalic(italic)
