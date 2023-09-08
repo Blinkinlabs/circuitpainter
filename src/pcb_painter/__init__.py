@@ -2,4 +2,4 @@
 
 __version__ = "0.0.1"
 
-from .pcb_painter import *
+from .pcb_painter import PcbPainter
