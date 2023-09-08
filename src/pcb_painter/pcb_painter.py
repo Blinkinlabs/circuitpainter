@@ -9,6 +9,7 @@ import numpy
 # https://github.com/KiCad/kicad-source-mirror/tree/master/pcbnew
 # https://github.com/cooked/kimotor/blob/master/kimotor_action.py
 
+
 class _TransformMatrix():
     """ Matrix transform to handle translations and rotations"""
 
@@ -17,9 +18,9 @@ class _TransformMatrix():
 
     def reset(self):
         """ Reset the matrix transform """
-        self.matrix = [[1,0,0],[0,1,0],[0,0,1]]
+        self.matrix = [[1, 0, 0], [0, 1, 0], [0, 0, 1]]
         self.states = []
-    
+
     def push(self):
         """ Save the transform state on a stack """
         self.states.append(self.matrix)
@@ -40,19 +41,19 @@ class _TransformMatrix():
         We restrict the transform to translate/rotate only, so angle is well
         defined.
         """
-        return math.degrees(math.atan2(self.matrix[0][1],self.matrix[0][0]))
+        return math.degrees(math.atan2(self.matrix[0][1], self.matrix[0][0]))
 
-    def translate(self,x,y):
+    def translate(self, x, y):
         """ Apply a linear transformation
 
         x: x component of translation vector
         y: y component of translation vector
         """
-        m = [[1,0,x],[0,1,y],[0,0,1]]
+        m = [[1, 0, x], [0, 1, y], [0, 0, 1]]
 
-        self.matrix = numpy.matmul(self.matrix,m)
+        self.matrix = numpy.matmul(self.matrix, m)
 
-    def rotate(self,angle):
+    def rotate(self, angle):
         """ Apply a rotation
 
         angle: Rotation angle (degrees)
@@ -62,98 +63,99 @@ class _TransformMatrix():
              [math.sin(r), math.cos(r), 0],
              [0, 0, 1]]
 
-        self.matrix = numpy.matmul(self.matrix,m)
+        self.matrix = numpy.matmul(self.matrix, m)
 
-    def project(self,x,y):
+    def project(self, x, y):
         """ Apply the transformation to a coordinate
 
         x: x component of point to transform
         y: y component of point to transform
         returns: x', y' transformed coordinate
         """
-        p = [x,y,1]
+        p = [x, y, 1]
 
-        result = numpy.matmul(self.matrix,p)
-        return float(result[0]),float(result[1])
+        result = numpy.matmul(self.matrix, p)
+        return float(result[0]), float(result[1])
 
-    def inverse_project(self,x,y):
+    def inverse_project(self, x, y):
         """ Apply an inverse transformation to a coordinate
 
         x: x component of point to transform
         y: y component of point to transform
         returns: x', y' transformed coordinate
         """
-        p = [x,y,1]
+        p = [x, y, 1]
 
         inv = numpy.linalg.inv(self.matrix)
 
-        result = numpy.matmul(inv,p)
-        return float(result[0]),float(result[1])
+        result = numpy.matmul(inv, p)
+        return float(result[0]), float(result[1])
+
 
 class PCB_Painter:
     # Board layers, from pcbnew
     layers = {
-        "F_Cu":pcbnew.F_Cu,
-        "In1_Cu":pcbnew.In1_Cu,
-        "In2_Cu":pcbnew.In2_Cu,
-        "In3_Cu":pcbnew.In3_Cu,
-        "In4_Cu":pcbnew.In4_Cu,
-        "In5_Cu":pcbnew.In5_Cu,
-        "In6_Cu":pcbnew.In6_Cu,
-        "In7_Cu":pcbnew.In7_Cu,
-        "In8_Cu":pcbnew.In8_Cu,
-        "In9_Cu":pcbnew.In9_Cu,
-        "In10_Cu":pcbnew.In10_Cu,
-        "In11_Cu":pcbnew.In11_Cu,
-        "In12_Cu":pcbnew.In12_Cu,
-        "In13_Cu":pcbnew.In13_Cu,
-        "In14_Cu":pcbnew.In14_Cu,
-        "In15_Cu":pcbnew.In15_Cu,
-        "In16_Cu":pcbnew.In16_Cu,
-        "In17_Cu":pcbnew.In17_Cu,
-        "In18_Cu":pcbnew.In18_Cu,
-        "In19_Cu":pcbnew.In19_Cu,
-        "In20_Cu":pcbnew.In20_Cu,
-        "In21_Cu":pcbnew.In21_Cu,
-        "In22_Cu":pcbnew.In22_Cu,
-        "In23_Cu":pcbnew.In23_Cu,
-        "In24_Cu":pcbnew.In24_Cu,
-        "In25_Cu":pcbnew.In25_Cu,
-        "In26_Cu":pcbnew.In26_Cu,
-        "In27_Cu":pcbnew.In27_Cu,
-        "In28_Cu":pcbnew.In28_Cu,
-        "In29_Cu":pcbnew.In29_Cu,
-        "In30_Cu":pcbnew.In30_Cu,
-        "B_Cu":pcbnew.B_Cu,
-        "B_Adhes":pcbnew.B_Adhes,
-        "F_Adhes":pcbnew.F_Adhes,
-        "B_Paste":pcbnew.B_Paste,
-        "F_Paste":pcbnew.F_Paste,
-        "B_SilkS":pcbnew.B_SilkS,
-        "F_SilkS":pcbnew.F_SilkS,
-        "B_Mask":pcbnew.B_Mask,
-        "F_Mask":pcbnew.F_Mask,
-        "Dwgs_User":pcbnew.Dwgs_User,
-        "Cmts_User":pcbnew.Cmts_User,
-        "Eco1_User":pcbnew.Eco1_User,
-        "Eco2_User":pcbnew.Eco2_User,
-        "Edge_Cuts":pcbnew.Edge_Cuts,
-        "Margin":pcbnew.Margin,
-        "B_CrtYd":pcbnew.B_CrtYd,
-        "F_CrtYd":pcbnew.F_CrtYd,
-        "B_Fab":pcbnew.B_Fab,
-        "F_Fab":pcbnew.F_Fab,
-        "User_1":pcbnew.User_1,
-        "User_2":pcbnew.User_2,
-        "User_3":pcbnew.User_3,
-        "User_4":pcbnew.User_4,
-        "User_5":pcbnew.User_5,
-        "User_6":pcbnew.User_6,
-        "User_7":pcbnew.User_7,
-        "User_8":pcbnew.User_8,
-        "User_9":pcbnew.User_9,
-        "Rescue":pcbnew.Rescue,
-        }
+        "F_Cu": pcbnew.F_Cu,
+        "In1_Cu": pcbnew.In1_Cu,
+        "In2_Cu": pcbnew.In2_Cu,
+        "In3_Cu": pcbnew.In3_Cu,
+        "In4_Cu": pcbnew.In4_Cu,
+        "In5_Cu": pcbnew.In5_Cu,
+        "In6_Cu": pcbnew.In6_Cu,
+        "In7_Cu": pcbnew.In7_Cu,
+        "In8_Cu": pcbnew.In8_Cu,
+        "In9_Cu": pcbnew.In9_Cu,
+        "In10_Cu": pcbnew.In10_Cu,
+        "In11_Cu": pcbnew.In11_Cu,
+        "In12_Cu": pcbnew.In12_Cu,
+        "In13_Cu": pcbnew.In13_Cu,
+        "In14_Cu": pcbnew.In14_Cu,
+        "In15_Cu": pcbnew.In15_Cu,
+        "In16_Cu": pcbnew.In16_Cu,
+        "In17_Cu": pcbnew.In17_Cu,
+        "In18_Cu": pcbnew.In18_Cu,
+        "In19_Cu": pcbnew.In19_Cu,
+        "In20_Cu": pcbnew.In20_Cu,
+        "In21_Cu": pcbnew.In21_Cu,
+        "In22_Cu": pcbnew.In22_Cu,
+        "In23_Cu": pcbnew.In23_Cu,
+        "In24_Cu": pcbnew.In24_Cu,
+        "In25_Cu": pcbnew.In25_Cu,
+        "In26_Cu": pcbnew.In26_Cu,
+        "In27_Cu": pcbnew.In27_Cu,
+        "In28_Cu": pcbnew.In28_Cu,
+        "In29_Cu": pcbnew.In29_Cu,
+        "In30_Cu": pcbnew.In30_Cu,
+        "B_Cu": pcbnew.B_Cu,
+        "B_Adhes": pcbnew.B_Adhes,
+        "F_Adhes": pcbnew.F_Adhes,
+        "B_Paste": pcbnew.B_Paste,
+        "F_Paste": pcbnew.F_Paste,
+        "B_SilkS": pcbnew.B_SilkS,
+        "F_SilkS": pcbnew.F_SilkS,
+        "B_Mask": pcbnew.B_Mask,
+        "F_Mask": pcbnew.F_Mask,
+        "Dwgs_User": pcbnew.Dwgs_User,
+        "Cmts_User": pcbnew.Cmts_User,
+        "Eco1_User": pcbnew.Eco1_User,
+        "Eco2_User": pcbnew.Eco2_User,
+        "Edge_Cuts": pcbnew.Edge_Cuts,
+        "Margin": pcbnew.Margin,
+        "B_CrtYd": pcbnew.B_CrtYd,
+        "F_CrtYd": pcbnew.F_CrtYd,
+        "B_Fab": pcbnew.B_Fab,
+        "F_Fab": pcbnew.F_Fab,
+        "User_1": pcbnew.User_1,
+        "User_2": pcbnew.User_2,
+        "User_3": pcbnew.User_3,
+        "User_4": pcbnew.User_4,
+        "User_5": pcbnew.User_5,
+        "User_6": pcbnew.User_6,
+        "User_7": pcbnew.User_7,
+        "User_8": pcbnew.User_8,
+        "User_9": pcbnew.User_9,
+        "Rescue": pcbnew.Rescue,
+    }
 
     def __init__(self, pcb=None, libpath=None):
         """ Construct a PCB builder
@@ -163,12 +165,12 @@ class PCB_Painter:
         libpath: (optional) Path to the footprint libraries
         """
 
-        if pcb != None:
+        if pcb is not None:
             self.pcb = pcb
         else:
             self.pcb = pcbnew.CreateEmptyBoard()
 
-        if libpath != None:
+        if libpath is not None:
             self.library_base = libpath
         else:
             self.library_base = "/usr/share/kicad/footprints/"
@@ -190,7 +192,7 @@ class PCB_Painter:
         # Keep a list of all components added to the board
         self.uuids = []
 
-    def save(self,filename):
+    def save(self, filename):
         """ Save the board design to a KiCad board file
 
         filename: File name to write to
@@ -200,7 +202,7 @@ class PCB_Painter:
 
         self.pcb.Save(f"{filename}.kicad_pcb")
 
-    def width(self,width):
+    def width(self, width):
         """ Set the width to use for drawing commands
 
         Sets the width for objects like lines, tracks, arcs, etc.
@@ -209,7 +211,7 @@ class PCB_Painter:
         """
         self.draw_width = width
 
-    def layer(self,layer):
+    def layer(self, layer):
         """ Set the PCB drawing layer
 
         layer: Layer to use, for example "F_Cu"
@@ -248,15 +250,15 @@ class PCB_Painter:
         """ Restore the state of the last transformation matrix """
         self.transform.pop()
 
-    def translate(self, x,y):
+    def translate(self, x, y):
         """ Translate all following graphics commands by the given amounts
 
         x: x translation (mm)
         y: y translation (mm)
         """
-        self.transform.translate(x,y)
+        self.transform.translate(x, y)
 
-    def rotate(self,angle):
+    def rotate(self, angle):
         """ Rotate all following graphics commands by the given angle
 
         angle: rotation angle (degrees)
@@ -264,17 +266,17 @@ class PCB_Painter:
 
         self.transform.rotate(angle)
 
-    def _localToWorld(self,x,y):
+    def _localToWorld(self, x, y):
         """ Convert a local coordinate in mm, to a board coordinate """
-        xp,yp = self.transform.project(x,y)
-        return pcbnew.VECTOR2I_MM(round(xp,3),round(yp,3))
+        xp, yp = self.transform.project(x, y)
+        return pcbnew.VECTOR2I_MM(round(xp, 3), round(yp, 3))
 
-    def _worldToLocal(self,x,y):
+    def _worldToLocal(self, x, y):
         """ Convert a board coordinate, to a local coordinate in mm """
-        absolute = pcbnew.ToMM(pcbnew.VECTOR2I(x,y))
+        absolute = pcbnew.ToMM(pcbnew.VECTOR2I(x, y))
         return self.transform.inverse_project(*absolute)
 
-    def _addItem(self,item):
+    def _addItem(self, item):
         """ Add an item to the PCB
 
         item: Item to add
@@ -283,7 +285,6 @@ class PCB_Painter:
         self.group.AddItem(item)
         self.uuids.append(item.m_Uuid)
         return item
-
 
     def getObjectPosition(self, o):
         """ Get a local coordinate for a PCB object
@@ -311,31 +312,31 @@ class PCB_Painter:
 
         net = self.pcb.FindNet(name)
 
-        if net == None:
+        if net is None:
             net = pcbnew.NETINFO_ITEM(self.pcb, name)
             self.pcb.Add(net)
 
         return net
 
-    def track(self,x1,y1,x2,y2,net=None):
+    def track(self, x1, y1, x2, y2, net=None):
         """ Place a PCB track
-    
+
         x1,y1: starting point (mm)
         x2,y2: ending point (mm)
         net: (optional) Net to connect track to
         """
-    
+
         track = pcbnew.PCB_TRACK(self.pcb)
         track.SetWidth(pcbnew.FromMM(self.draw_width))
         track.SetLayer(self.layers[self.draw_layer])
-        track.SetStart(self._localToWorld(x1,y1))
-        track.SetEnd(self._localToWorld(x2,y2))
-        if net != None:
+        track.SetStart(self._localToWorld(x1, y1))
+        track.SetEnd(self._localToWorld(x2, y2))
+        if net is not None:
             track.SetNet(self._findNet(net))
 
         return self._addItem(track)
-    
-    def arcTrack(self,x,y,radius,start,end,net=None):
+
+    def arcTrack(self, x, y, radius, start, end, net=None):
         """ Draw an arc-shaped PCB track
 
         Note that arc-shaped tracks are a little weirder than normal arcs. The
@@ -349,101 +350,109 @@ class PCB_Painter:
         end: ending angle of arc (degrees)
         net: (optional) Net to connect track to
         """
-        start_x = x + radius*math.cos(math.radians(start))
-        start_y = y + radius*math.sin(math.radians(start))
+        start_x = x + radius * math.cos(math.radians(start))
+        start_y = y + radius * math.sin(math.radians(start))
 
-        mid_angle = (end-start)/2+start
-        mid_x = x + radius*math.cos(math.radians(mid_angle))
-        mid_y = y + radius*math.sin(math.radians(mid_angle))
+        mid_angle = (end - start) / 2 + start
+        mid_x = x + radius * math.cos(math.radians(mid_angle))
+        mid_y = y + radius * math.sin(math.radians(mid_angle))
 
-        end_x = x + radius*math.cos(math.radians(end))
-        end_y = y + radius*math.sin(math.radians(end))
+        end_x = x + radius * math.cos(math.radians(end))
+        end_y = y + radius * math.sin(math.radians(end))
 
         track = pcbnew.PCB_ARC(self.pcb)
         track.SetWidth(pcbnew.FromMM(self.draw_width))
         track.SetLayer(self.layers[self.draw_layer])
-        track.SetStart(self._localToWorld(start_x,start_y))
-        track.SetMid(self._localToWorld(mid_x,mid_y))
-        track.SetEnd(self._localToWorld(end_x,end_y))
-        if net != None:
+        track.SetStart(self._localToWorld(start_x, start_y))
+        track.SetMid(self._localToWorld(mid_x, mid_y))
+        track.SetEnd(self._localToWorld(end_x, end_y))
+        if net is not None:
             track.SetNet(self._findNet(net))
 
         return self._addItem(track)
 
-    def via(self,x,y,net=None,d=.3,w=.6):
+    def via(self, x, y, net=None, d=.3, w=.6):
         """ Place a via
-    
+
         x,y: via coordinate (mm)
         net: net to connect via to
         d: (optional) drill diameter (mm)
         w: (optional) annular ring diameter (mm)
         """
-    
+
         via = pcbnew.PCB_VIA(self.pcb)
-        via.SetPosition(self._localToWorld(x,y))
+        via.SetPosition(self._localToWorld(x, y))
         via.SetDrill(pcbnew.FromMM(d))
         via.SetWidth(pcbnew.FromMM(w))
-        if net != None: 
+        if net is not None:
             via.SetNet(self._findNet(net))
 
         return self._addItem(via)
-    
-    def polyZone(self,points,net=None):
+
+    def polyZone(self, points, net=None):
         """ Place a polygonal zone
-    
+
         Zones can be placed on both copper and non-copper layers
-    
+
         points: List of x,y coordinates that make up the polygon (mm)
         net: (optional) net to connect zone to.
         """
-        p_world = [self._localToWorld(point[0],point[1]) for point in points]
+        p_world = [self._localToWorld(point[0], point[1]) for point in points]
         v = pcbnew.VECTOR_VECTOR2I(p_world)
-    
+
         zone = pcbnew.ZONE(self.pcb)
         zone.SetLayer(self.layers[self.draw_layer])
         zone.AddPolygon(v)
-        if net != None:
+        if net is not None:
             zone.SetNet(self._findNet(net))
-    
+
         return self._addItem(zone)
-    
-    def rectZone(self,x1,y1,x2,y2,net=None):
+
+    def rectZone(self, x1, y1, x2, y2, net=None):
         """ Place a rectangular zone
-    
+
         Zones can be placed on both copper and non-copper layers
-    
+
         x1,y1: first corner of rectangle (mm)
         x2,y2: second corner of rectangle (mm)
         net: (optional) net to connect rectangle to
         """
-    
-        points = [[x1,y1],[x1,y2],[x2,y2],[x2,y1]]
-        return self.polyZone(points,net)
 
-    def circleZone(self,x,y,radius,net=None):
+        points = [[x1, y1], [x1, y2], [x2, y2], [x2, y1]]
+        return self.polyZone(points, net)
+
+    def circleZone(self, x, y, radius, net=None):
         """ Place a circular zone
-    
+
         Zones can be placed on both copper and non-copper layers
 
         Note that the zone is made of a line segments that approximate the
         circle.
-    
+
         x,y: center of circle (mm)
         radius: radius of circle (mm)
         net: (optional) net to connect rectangle to
         """
-   
-        resolution = 0.5 # approximation resolution, in mm
 
-        c = 2*math.pi*radius
-        segments = int(c/resolution)
+        resolution = 0.5  # approximation resolution, in mm
 
-        angles = [s/segments*2*math.pi for s in range(0,segments)]
-        points = [[x+math.cos(a),y+math.sin(a)] for a in angles]
+        c = 2 * math.pi * radius
+        segments = int(c / resolution)
 
-        return self.polyZone(points,net)
-   
-    def footprint(self,x,y,library,name,reference=None,angle=0,nets=None):
+        angles = [s / segments * 2 * math.pi for s in range(0, segments)]
+        points = [[x + math.cos(a), y + math.sin(a)] for a in angles]
+
+        return self.polyZone(points, net)
+
+    def footprint(
+            self,
+            x,
+            y,
+            library,
+            name,
+            reference=None,
+            angle=0,
+            nets=None):
         """ Place a footprint
 
         Places a footprint from the given library onto the board
@@ -465,21 +474,27 @@ class PCB_Painter:
               happily make connections that will damage your part.
         """
 
-        #print(FootprintEnumerate(library))
+        # print(FootprintEnumerate(library))
 
-        if reference == None:
+        if reference is None:
             reference = f'P_{self.next_designator}'
             self.next_designator += 1
 
-        footprint = pcbnew.FootprintLoad(self.library_base+library+".pretty", name)
-        footprint.SetPosition(self._localToWorld(x,y))
-        footprint.SetOrientation(pcbnew.EDA_ANGLE(angle+self.transform.getAngle(), pcbnew.DEGREES_T))
+        footprint = pcbnew.FootprintLoad(
+            self.library_base + library + ".pretty", name)
+        footprint.SetPosition(self._localToWorld(x, y))
+        footprint.SetOrientation(
+            pcbnew.EDA_ANGLE(
+                angle +
+                self.transform.getAngle(),
+                pcbnew.DEGREES_T))
         footprint.SetReference(reference)
         footprint.Reference().SetVisible(self.show_reference_designators)
 
-        if nets != None:
+        if nets is not None:
             if len(nets) != len(footprint.Pads()):
-                print(f'Incorrect number of nets provided, expected:{len(footprint.Pads())} got:{len(nets)}')
+                print(
+                    f'Incorrect number of nets provided, expected:{len(footprint.Pads())} got:{len(nets)}')
                 exit(1)
 
             for net, pad in zip(nets, footprint.Pads()):
@@ -487,9 +502,9 @@ class PCB_Painter:
 
         return self._addItem(footprint)
 
-    def getPads(self,reference):
-        """ Get a list of the pads in the specified footprint 
-        
+    def getPads(self, reference):
+        """ Get a list of the pads in the specified footprint
+
         reference: Reference designator to retrieve pads from. For example:
                    LED1
         """
@@ -497,8 +512,8 @@ class PCB_Painter:
         for footprint in self.pcb.GetFootprints():
             if reference == footprint.GetReference():
                 return footprint.Pads()
-    
-            #for pad in footprint.Pads():
+
+            # for pad in footprint.Pads():
             #    print('pad ', pad.GetName(),
             #          ToMM(pad.GetPosition()),
             #          ToMM(pad.GetOffset()),
@@ -507,27 +522,26 @@ class PCB_Painter:
 
         return None
 
-
-    def line(self,x1,y1,x2,y2):
+    def line(self, x1, y1, x2, y2):
         """ Draw a line from x1,y1 to x2,y2
-    
+
         A line is a graphical object, and can be used to make a board outline
         soldermask, for example, but not to make a conductive track.
-    
+
         x1,y1: starting point (mm)
         x2,y2: eneding point (mm)
         """
         line = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_SEGMENT)
         line.SetWidth(pcbnew.FromMM(self.draw_width))
         line.SetLayer(self.layers[self.draw_layer])
-        line.SetStart(self._localToWorld(x1,y1))
-        line.SetEnd(self._localToWorld(x2,y2))
-    
+        line.SetStart(self._localToWorld(x1, y1))
+        line.SetEnd(self._localToWorld(x2, y2))
+
         return self._addItem(line)
-    
-    def arc(self,x,y,radius,start,end):
+
+    def arc(self, x, y, radius, start, end):
         """ Draw an arc
-    
+
         An arc is a graphical object, and can be used to make a board outline
         soldermask, for example, but not to make a conductive track.
 
@@ -537,27 +551,27 @@ class PCB_Painter:
         end: ending angle of arc (degrees)
         """
 
-        start_x = x + radius*math.cos(math.radians(start))
-        start_y = y + radius*math.sin(math.radians(start))
+        start_x = x + radius * math.cos(math.radians(start))
+        start_y = y + radius * math.sin(math.radians(start))
 
-        end_x = x + radius*math.cos(math.radians(end))
-        end_y = y + radius*math.sin(math.radians(end))
+        end_x = x + radius * math.cos(math.radians(end))
+        end_y = y + radius * math.sin(math.radians(end))
 
         arc = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_ARC)
         arc.SetWidth(pcbnew.FromMM(self.draw_width))
         arc.SetLayer(self.layers[self.draw_layer])
-        arc.SetCenter(self._localToWorld(x,y))
-        arc.SetStart(self._localToWorld(start_x,start_y))
-        arc.SetEnd(self._localToWorld(end_x,end_y))
-    
+        arc.SetCenter(self._localToWorld(x, y))
+        arc.SetStart(self._localToWorld(start_x, start_y))
+        arc.SetEnd(self._localToWorld(end_x, end_y))
+
         return self._addItem(arc)
-    
-    def circle(self,x,y,radius):
+
+    def circle(self, x, y, radius):
         """ Draw a circle
-    
+
         A circle is a graphical object, and can be used to make a cutout in a
         soldermask, for example, but not to make a conductive track.
-    
+
         x,y: center of circle (mm)
         radius: radius of circle (mm)
         """
@@ -565,22 +579,25 @@ class PCB_Painter:
         circle.SetWidth(pcbnew.FromMM(self.draw_width))
         circle.SetLayer(self.layers[self.draw_layer])
         circle.SetFilled(self.draw_fill)
-        circle.SetCenter(self._localToWorld(x,y))
+        circle.SetCenter(self._localToWorld(x, y))
         # Note: there isn't a SetRadius() function
-        circle.SetStart(self._localToWorld(x,y))
-        circle.SetEnd(self._localToWorld(x,y+radius))
-    
+        circle.SetStart(self._localToWorld(x, y))
+        circle.SetEnd(self._localToWorld(x, y + radius))
+
         return self._addItem(circle)
-   
-    def poly(self,points):
+
+    def poly(self, points):
         """ Draw a polygon
-    
+
         A polygon is a graphical object, and can be used to make a cutout in
         a soldermask, for example, but not to make a conductive track.
-       
+
         points: List of points to add to the polygon (mm)
         """
-        points_world = [self._localToWorld(point[0],point[1]) for point in points]
+        points_world = [
+            self._localToWorld(
+                point[0],
+                point[1]) for point in points]
         v = pcbnew.VECTOR_VECTOR2I(points_world)
 
         poly = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_POLY)
@@ -588,26 +605,35 @@ class PCB_Painter:
         poly.SetLayer(self.layers[self.draw_layer])
         poly.SetFilled(self.draw_fill)
         poly.SetPolyPoints(v)
-    
+
         return self._addItem(poly)
 
-    def rect(self,x1,y1,x2,y2):
+    def rect(self, x1, y1, x2, y2):
         """ Draw a rectangle
-    
+
         A rectangle is a graphical object, and can be used to make a cutout in
         a soldermask, for example, but not to make a conductive track.
 
         Note: Rectangles are created as polygon objects, so that they can
         support rotation.
-        
+
         x1,y1: first corner of rectangle (mm)
         x2,y2: second corner of rectangle (mm)
         """
-    
-        points = [[x1,y1],[x1,y2],[x2,y2],[x2,y1]]
+
+        points = [[x1, y1], [x1, y2], [x2, y2], [x2, y1]]
         return self.poly(points)
 
-    def text(self,x,y,message,angle=0,mirrored=False,bold=False,italic=False,knockout=False):
+    def text(
+            self,
+            x,
+            y,
+            message,
+            angle=0,
+            mirrored=False,
+            bold=False,
+            italic=False,
+            knockout=False):
         """ Draw text
 
         Text is is a graphical object, and can be used to make a cutout in
@@ -626,8 +652,12 @@ class PCB_Painter:
         text = pcbnew.PCB_TEXT(self.pcb)
         text.SetLayer(self.layers[self.draw_layer])
         text.SetText(message)
-        text.SetTextPos(self._localToWorld(x,y))
-        text.SetTextAngle(pcbnew.EDA_ANGLE(self.transform.getAngle()+angle, pcbnew.DEGREES_T))
+        text.SetTextPos(self._localToWorld(x, y))
+        text.SetTextAngle(
+            pcbnew.EDA_ANGLE(
+                self.transform.getAngle() +
+                angle,
+                pcbnew.DEGREES_T))
         text.SetMirrored(mirrored)
         text.SetBold(bold)
         text.SetItalic(italic)

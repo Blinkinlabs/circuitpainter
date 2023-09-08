@@ -1,5 +1,13 @@
 # Project development
 
+## Linting
+
+    python3 -m venv .venv
+    . .venv/bin/activate
+    pip install autopep8 mypy pylint numpy
+    make lint
+
+
 ## Publishing to PyPi
 
 This library is published using flit.
