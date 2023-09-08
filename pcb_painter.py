@@ -6,6 +6,7 @@ import numpy
 
 # References:
 # /usr/lib/python3/dist-packages/pcbnew.py
+# https://github.com/KiCad/kicad-source-mirror/tree/master/pcbnew
 # https://github.com/cooked/kimotor/blob/master/kimotor_action.py
 
 class _TransformMatrix():
@@ -175,15 +176,26 @@ class PCB_Painter:
         self.transform = _TransformMatrix()
         self.next_designator = 1
 
-        self.draw_width = 0.1 # default width
+        # Default draw settings
+        self.draw_width = 0.1
         self.draw_layer = "F_Cu"
         self.draw_fill = False
+
+        # Put all generated items into a group, to make them easier to
+        # identify.
+        self.group = pcbnew.PCB_GROUP(self.pcb)
+        self.pcb.Add(self.group)
+
+        # Keep a list of all components added to the board
+        self.uuids = []
 
     def save(self,filename):
         """ Save the board design to a KiCad board file
 
         filename: File name to write to
         """
+
+#        print([u.AsString() for u in self.uuids])
 
         self.pcb.Save(f"{filename}.kicad_pcb")
 
@@ -252,6 +264,17 @@ class PCB_Painter:
         absolute = pcbnew.ToMM(pcbnew.VECTOR2I(x,y))
         return self.transform.inverse_project(*absolute)
 
+    def _addItem(self,item):
+        """ Add an item to the PCB
+
+        item: Item to add
+        """
+        self.pcb.Add(item)
+        self.group.AddItem(item)
+        self.uuids.append(item.m_Uuid)
+        return item
+
+
     def getObjectPosition(self, o):
         """ Get a local coordinate for a PCB object
 
@@ -300,8 +323,7 @@ class PCB_Painter:
         if net != None:
             track.SetNet(self._findNet(net))
 
-        self.pcb.Add(track)
-        return track
+        return self._addItem(track)
     
     def arcTrack(self,x,y,radius,start,end,net=None):
         """ Draw an arc-shaped PCB track
@@ -336,8 +358,7 @@ class PCB_Painter:
         if net != None:
             track.SetNet(self._findNet(net))
 
-        self.pcb.Add(track)
-        return track
+        return self._addItem(track)
 
     def via(self,x,y,net=None,d=.3,w=.6):
         """ Place a via
@@ -355,8 +376,7 @@ class PCB_Painter:
         if net != None: 
             via.SetNet(self._findNet(net))
 
-        self.pcb.Add(via)
-        return via
+        return self._addItem(via)
     
     def polyZone(self,points,net=None):
         """ Place a polygonal zone
@@ -375,8 +395,7 @@ class PCB_Painter:
         if net != None:
             zone.SetNet(self._findNet(net))
     
-        self.pcb.Add(zone)
-        return zone
+        return self._addItem(zone)
     
     def rectZone(self,x1,y1,x2,y2,net=None):
         """ Place a rectangular zone
@@ -455,8 +474,7 @@ class PCB_Painter:
             for net, pad in zip(nets, footprint.Pads()):
                 pad.SetNet(self._findNet(net))
 
-        self.pcb.Add(footprint)
-        return footprint
+        return self._addItem(footprint)
 
     def getPads(self,reference):
         """ Get a list of the pads in the specified footprint 
@@ -494,8 +512,7 @@ class PCB_Painter:
         line.SetStart(self._localToWorld(x1,y1))
         line.SetEnd(self._localToWorld(x2,y2))
     
-        self.pcb.Add(line)
-        return line
+        return self._addItem(line)
     
     def arc(self,x,y,radius,start,end):
         """ Draw an arc
@@ -518,8 +535,7 @@ class PCB_Painter:
         arc.SetStart(self._localToWorld(start_x,start_y))
         arc.SetArcAngleAndEnd(pcbnew.EDA_ANGLE(end-start, pcbnew.DEGREES_T))
     
-        self.pcb.Add(arc)
-        return arc
+        return self._addItem(arc)
     
     def circle(self,x,y,radius):
         """ Draw a circle
@@ -539,8 +555,7 @@ class PCB_Painter:
         circle.SetStart(self._localToWorld(x,y))
         circle.SetEnd(self._localToWorld(x,y+radius))
     
-        self.pcb.Add(circle)
-        return circle
+        return self._addItem(circle)
    
     def poly(self,points):
         """ Draw a polygon
@@ -559,8 +574,7 @@ class PCB_Painter:
         poly.SetFilled(self.draw_fill)
         poly.SetPolyPoints(v)
     
-        self.pcb.Add(poly)
-        return poly
+        return self._addItem(poly)
 
     def rect(self,x1,y1,x2,y2):
         """ Draw a rectangle
@@ -599,5 +613,4 @@ class PCB_Painter:
         text.SetItalic(italic)
         text.SetIsKnockout(knockout)
 
-        self.pcb.Add(text)
-        return text
+        return self._addItem(text)
