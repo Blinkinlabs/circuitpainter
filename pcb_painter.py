@@ -257,7 +257,8 @@ class PCB_Painter:
 
     def _localToWorld(self,x,y):
         """ Convert a local coordinate in mm, to a board coordinate """
-        return pcbnew.VECTOR2I_MM(*self.transform.project(x,y))
+        xp,yp = self.transform.project(x,y)
+        return pcbnew.VECTOR2I_MM(round(xp,3),round(yp,3))
 
     def _worldToLocal(self,x,y):
         """ Convert a board coordinate, to a local coordinate in mm """
@@ -525,15 +526,19 @@ class PCB_Painter:
         start: starting angle of arc (degrees)
         end: ending angle of arc (degrees)
         """
+
         start_x = x + radius*math.cos(math.radians(start))
         start_y = y + radius*math.sin(math.radians(start))
+
+        end_x = x + radius*math.cos(math.radians(end))
+        end_y = y + radius*math.sin(math.radians(end))
 
         arc = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_ARC)
         arc.SetWidth(pcbnew.FromMM(self.draw_width))
         arc.SetLayer(self.layers[self.draw_layer])
         arc.SetCenter(self._localToWorld(x,y))
         arc.SetStart(self._localToWorld(start_x,start_y))
-        arc.SetArcAngleAndEnd(pcbnew.EDA_ANGLE(end-start, pcbnew.DEGREES_T))
+        arc.SetEnd(self._localToWorld(end_x,end_y))
     
         return self._addItem(arc)
     
