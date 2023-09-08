@@ -1,8 +1,8 @@
-from pcb_painter import PcbPainter
+from circuitpainter import CircuitPainter
 import math
 
 def asterix(arms,leds_per_arm):
-    painter = PcbPainter()
+    painter = CircuitPainter()
 
     # Start drawing at a nicer location
     painter.translate(100,100)

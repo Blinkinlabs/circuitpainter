@@ -3,7 +3,7 @@ requires = ["flit_core >=3.2,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "pcb_painter"
+name = "circuitpainter"
 authors = [{name = "Matthew Mets", email = "matt@blinkinlabs.com"}]
 license = {file = "LICENSE"}
 classifiers = ["License :: OSI Approved :: MIT License"]

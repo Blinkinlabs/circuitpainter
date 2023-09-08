@@ -1,15 +1,16 @@
 #!/usr/bin/env python
 
-import pcbnew
 import math
-from pcb_painter.transform_matrix import TransformMatrix
+import pcbnew
+from circuitpainter.transform_matrix import TransformMatrix
 
 # References:
 # /usr/lib/python3/dist-packages/pcbnew.py
 # https://github.com/KiCad/kicad-source-mirror/tree/master/pcbnew
 # https://github.com/cooked/kimotor/blob/master/kimotor_action.py
 
-class PcbPainter:
+
+class CircuitPainter:
     # Board layers, from pcbnew
     layers = {
         "F_Cu": pcbnew.F_Cu,
@@ -75,7 +76,7 @@ class PcbPainter:
     }
 
     def __init__(self, pcb=None, libpath=None):
-        """ Construct a PCB builder
+        """ Create a Circuit Builder context
 
         pcb: (optional) If specified, work with the given PCB. If not
              specified, start with a blank PCB
@@ -114,8 +115,6 @@ class PcbPainter:
 
         filename: File name to write to
         """
-
-#        print([u.AsString() for u in self.uuids])
 
         self.pcb.Save(f"{filename}.kicad_pcb")
 

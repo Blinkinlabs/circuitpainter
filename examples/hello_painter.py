@@ -1,7 +1,7 @@
-from pcb_painter import PcbPainter
+from circuitpainter import CircuitPainter
 
-# Create a new PCB Painter
-painter = PcbPainter()
+# Create a new circuit board
+painter = CircuitPainter()
 
 # Start drawing at position 50, 50 on the circuit board canvas, so that it
 # fits in the sheet nicely.
