@@ -115,7 +115,6 @@ class CircuitPainter:
 
         filename: File name to write to
         """
-
         self.pcb.Save(f"{filename}.kicad_pcb")
 
     def width(self, width):
@@ -580,3 +579,63 @@ class CircuitPainter:
         text.SetIsKnockout(knockout)
 
         return self._add_item(text)
+
+    def preview(self):
+        """ Preview the output file in KiCad
+
+        This saves the file to a temporary loation, then opens it using pcbnew.
+        """
+        from tempfile import TemporaryDirectory
+        import subprocess
+
+        with TemporaryDirectory() as tmpdir:
+            self.save(f"{tmpdir}/preview")
+            subprocess.check_call(["pcbnew", f"{tmpdir}/preview.kicad_pcb"])
+
+    def export_gerber(self, filename):
+        """ Export the design to gerbers / drill file
+
+        This saves the file to a temporary loation, uses the kicad command
+        line interface to render gerber outputs, and finally places the
+        gerbers in a zip file.
+
+        filename: Name of zip file to write to
+        """
+        from tempfile import TemporaryDirectory
+        import subprocess
+        import glob
+        import os
+
+        with TemporaryDirectory() as tmpdir_kicad, TemporaryDirectory() as tmpdir_gerber:
+
+            # Write the kicad pcb out to a temporary location
+            self.save(f"{tmpdir_kicad}/{filename}")
+
+            # Generate gerbers to yet another location
+            # TODO: repour zones
+            # TODO: DRC?
+            # TODO: use drill origin, remove empty layers?
+            subprocess.check_call(["kicad-cli",
+                                   "pcb",
+                                   "export",
+                                   "gerbers",
+                                   f"{tmpdir_kicad}/{filename}.kicad_pcb"],
+                                  cwd=tmpdir_gerber)
+            subprocess.check_call(["kicad-cli",
+                                   "pcb",
+                                   "export",
+                                   "drill",
+                                   f"{tmpdir_kicad}/{filename}.kicad_pcb"],
+                                  cwd=tmpdir_gerber)
+
+            # Zip up the gerbers
+            files = glob.glob(f"{tmpdir_gerber}/*")
+
+            if os.path.exists(f"{tmpdir_gerber}/{filename}-job.gbrjob"):
+                os.remove(f"{tmpdir_gerber}/{filename}-job.gbrjob")
+
+            if os.path.exists(f"{filename}.zip"):
+                os.remove(f"{filename}.zip")
+
+            subprocess.check_call(
+                ["zip", f"{filename}.zip", *files])
