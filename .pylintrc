@@ -1,0 +1,3 @@
+[FORMAT]
+# Good variable names which should always be accepted, separated by a comma
+good-names=x,y,x1,y1,x2,y2
