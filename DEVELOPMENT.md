@@ -20,13 +20,12 @@ This just runs the examples; it doesn't verify their outputs
 
     make lint
 
-
 ## Publishing to PyPi
 
 This library is published using flit.
 
 Before publishing, be sure to lint the code, and update the version number
-in src/pcb_painter/__init__.py
+in src/circuitpainter/__init__.py
 
 First, make a virtual environment to publish from:
 
