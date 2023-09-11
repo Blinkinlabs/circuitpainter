@@ -28,5 +28,5 @@ painter.footprint(30,10,
                   "LED_THT","LED_D5.0mm",
                   angle=90,nets=['gnd','vbat']
                   )
-
+painter.preview()
 painter.save("hello_painter")

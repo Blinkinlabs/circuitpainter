@@ -121,7 +121,7 @@ class CircuitPainter:
         # GetDesignSettings(), the magic DRC function has to be run afterwards
         # in order to apply them. So we can't run DRC during init, because
         # it would prevent modifying the design rules. Instead, we run the DRC
-        # once before the fill_zones command is called.
+        # once before the _fill_zones command is called.
         self.is_drc_run = False
 
     def width(self, width):
@@ -588,7 +588,7 @@ class CircuitPainter:
 
         return self._add_item(text)
 
-    def fill_zones(self):
+    def _fill_zones(self):
         """ Re-pour copper zones on the PCB
 
         This is performed automatically by the save, preview, drc, and
@@ -614,12 +614,24 @@ class CircuitPainter:
 
         filler.Fill(zones)
 
+    def _auto_set_origin(self):
+        # Sets the board origin at the bottom-left hand corner of the pcb
+        # edge bounding box. If the edge is not well-defined, it should
+        # resolve to no offset.
+        boundary = self.pcb.GetBoardEdgesBoundingBox()
+        x = boundary.GetX()
+        y = boundary.GetY() + boundary.GetHeight()
+
+        settings = self.pcb.GetDesignSettings()
+        settings.SetAuxOrigin(pcbnew.VECTOR2I(x,y))
+
     def save(self, filename):
         """ Save the board design to a KiCad board file
 
         filename: File name to write to
         """
-        self.fill_zones()
+        self._fill_zones()
+        self._auto_set_origin()
 
         self.pcb.Save(f"{filename}.kicad_pcb")
 
@@ -628,7 +640,9 @@ class CircuitPainter:
 
         This saves the file to a temporary loation, then opens it using pcbnew.
         """
-        self.fill_zones()
+        self._fill_zones()
+        self._auto_set_origin()
+
 
         with TemporaryDirectory() as tmpdir:
             self.save(f"{tmpdir}/preview")
@@ -639,7 +653,7 @@ class CircuitPainter:
 #
 #        filename: Name of DRC file to write
 #        """
-#        self.fill_zones()
+#        self._fill_zones()
 #
 #        pcbnew.WriteDRCReport(
 #            self.pcb,
@@ -656,7 +670,9 @@ class CircuitPainter:
 
         filename: Name of zip file to write to
         """
-        self.fill_zones()
+        self._fill_zones()
+        self._auto_set_origin()
+
 
         with TemporaryDirectory() as tmpdir_kicad, TemporaryDirectory() as tmpdir_gerber:
             # Write the kicad pcb out to a temporary location
@@ -668,20 +684,24 @@ class CircuitPainter:
                                    "pcb",
                                    "export",
                                    "gerbers",
+                                   "--use-drill-file-origin",
                                    f"{tmpdir_kicad}/{filename}.kicad_pcb"],
                                   cwd=tmpdir_gerber)
             subprocess.check_call(["kicad-cli",
                                    "pcb",
                                    "export",
                                    "drill",
+                                   "--drill-origin",
+                                   "plot",
                                    f"{tmpdir_kicad}/{filename}.kicad_pcb"],
                                   cwd=tmpdir_gerber)
 
-            # Zip up the gerbers
-            files = glob.glob(f"{tmpdir_gerber}/*")
-
+            # Don't copy the gbrjob file
             if os.path.exists(f"{tmpdir_gerber}/{filename}-job.gbrjob"):
                 os.remove(f"{tmpdir_gerber}/{filename}-job.gbrjob")
+
+            # Zip up the gerbers
+            files = glob.glob(f"{tmpdir_gerber}/*")
 
             subprocess.check_call(
                 ["zip",
