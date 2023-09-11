@@ -26,29 +26,31 @@ painter.layer("F_Cu")
 painter.width(.4)
 for col in range(0,cols):
     for row in range(0,rows):
-        x = col*spacing
-        y = row*spacing
+        painter.push_matrix()
+        painter.translate(col*spacing,row*spacing)
 
-        painter.via(x,y,"gnd")
-        zone=painter.circle_zone(x,y,3,"gnd")
+        painter.via(0,0,"gnd")
+        zone=painter.circle_zone(0,0,2,"gnd")
         zone.SetAssignedPriority(1)
 
         if row == 0 and col%2 == 0:
-            painter.arc_track(x,y,spacing/2,180,270+180)
+            painter.arc_track(0,0,spacing/2,180,270+180)
 
         if row == rows - 1 and col%2 == 0:
-            painter.arc_track(x,y,spacing/2,0,270)
+            painter.arc_track(0,0,spacing/2,0,270)
 
         elif row == rows - 1 and col%2 == 1:
-            painter.arc_track(x,y,spacing/2,180,270)
+            painter.arc_track(0,0,spacing/2,180,270)
 
         elif row == 0 and col%2 == 1:
-            painter.arc_track(x,y,spacing/2,0,90)
+            painter.arc_track(0,0,spacing/2,0,90)
 
         elif row%2 == 0:
-            painter.arc_track(x,y,spacing/2,270,270+180)
+            painter.arc_track(0,0,spacing/2,270,270+180)
 
         else:
-            painter.arc_track(x,y,spacing/2,90,270)
+            painter.arc_track(0,0,spacing/2,90,270)
+
+        painter.pop_matrix()
 
 painter.save("arc_test")

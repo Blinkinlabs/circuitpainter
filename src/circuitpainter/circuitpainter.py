@@ -363,7 +363,7 @@ class CircuitPainter:
         segments = int(c / resolution)
 
         angles = [s / segments * 2 * math.pi for s in range(0, segments)]
-        points = [[x + math.cos(a), y + math.sin(a)] for a in angles]
+        points = [[x + radius*math.cos(a), y + radius*math.sin(a)] for a in angles]
 
         return self.poly_zone(points, net)
 
