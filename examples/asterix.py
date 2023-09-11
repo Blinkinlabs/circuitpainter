@@ -3,6 +3,7 @@ import math
 
 def asterix(arms,leds_per_arm):
     painter = CircuitPainter()
+    painter.no_designators()
 
     # Start drawing at a nicer location
     painter.translate(100,100)

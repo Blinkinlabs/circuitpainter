@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 
 import math
+import subprocess
+import glob
+import os
+from tempfile import TemporaryDirectory
 import pcbnew
 from circuitpainter.transform_matrix import TransformMatrix
 
@@ -75,7 +79,7 @@ class CircuitPainter:
         "Rescue": pcbnew.Rescue,
     }
 
-    def __init__(self, pcb=None, libpath=None):
+    def __init__(self, filename=None, libpath=None):
         """ Create a Circuit Builder context
 
         pcb: (optional) If specified, work with the given PCB. If not
@@ -83,10 +87,15 @@ class CircuitPainter:
         libpath: (optional) Path to the footprint libraries
         """
 
-        if pcb is not None:
-            self.pcb = pcb
+        if filename is not None:
+            self.pcb = pcbnew.LoadBoard(filename)
+            self.filename = filename
         else:
-            self.pcb = pcbnew.CreateEmptyBoard()
+            # Note: Use NewBoard here because CreateEmptyBoard is buggy, see:
+            # https://gitlab.com/kicad/code/kicad/-/issues/15619
+            self.tempdir = TemporaryDirectory()
+            self.filename = f"{self.tempdir.name}/board.kicad_pcb"
+            self.pcb = pcbnew.NewBoard(self.filename)
 
         if libpath is not None:
             self.library_base = libpath
@@ -109,13 +118,6 @@ class CircuitPainter:
 
         # Keep a list of all components added to the board
         self.uuids = []
-
-    def save(self, filename):
-        """ Save the board design to a KiCad board file
-
-        filename: File name to write to
-        """
-        self.pcb.Save(f"{filename}.kicad_pcb")
 
     def width(self, width):
         """ Set the width to use for drawing commands
@@ -318,6 +320,7 @@ class CircuitPainter:
         zone = pcbnew.ZONE(self.pcb)
         zone.SetLayer(self.layers[self.draw_layer])
         zone.AddPolygon(v)
+        zone.SetIsFilled(True)
         if net is not None:
             zone.SetNet(self._find_net(net))
 
@@ -389,12 +392,12 @@ class CircuitPainter:
               happily make connections that will damage your part.
         """
 
-        # print(FootprintEnumerate(library))
-
         if reference is None:
             reference = f'P_{self.next_designator}'
             self.next_designator += 1
 
+        # TODO: This creates DRC warinings; possibly the footprint needs to be loaded through
+        # library that's already linked to the project?
         footprint = pcbnew.FootprintLoad(
             self.library_base + library + ".pretty", name)
         footprint.SetPosition(self._local_to_world(x, y))
@@ -427,13 +430,6 @@ class CircuitPainter:
         for footprint in self.pcb.GetFootprints():
             if reference == footprint.GetReference():
                 return footprint.Pads()
-
-            # for pad in footprint.Pads():
-            #    print('pad ', pad.GetName(),
-            #          ToMM(pad.GetPosition()),
-            #          ToMM(pad.GetOffset()),
-            #          pad.GetNet().GetNetname()
-            #          )
 
         return None
 
@@ -580,17 +576,47 @@ class CircuitPainter:
 
         return self._add_item(text)
 
+    def fill_zones(self):
+        """ Re-pour copper zones on the PCB
+
+        This is performed automatically by the save, preview, and
+        export_gerber functions.
+        """
+        filler = pcbnew.ZONE_FILLER(self.pcb)
+        zones = self.pcb.Zones()
+
+        filler.Fill(zones)
+
+    def save(self, filename):
+        """ Save the board design to a KiCad board file
+
+        filename: File name to write to
+        """
+        self.fill_zones()
+
+        self.pcb.Save(f"{filename}.kicad_pcb")
+
     def preview(self):
         """ Preview the output file in KiCad
 
         This saves the file to a temporary loation, then opens it using pcbnew.
         """
-        from tempfile import TemporaryDirectory
-        import subprocess
+        self.fill_zones()
 
         with TemporaryDirectory() as tmpdir:
             self.save(f"{tmpdir}/preview")
             subprocess.check_call(["pcbnew", f"{tmpdir}/preview.kicad_pcb"])
+
+    def drc(self, filename):
+        """ Run the DRC tool, and save the output to a file
+
+        filename: Name of DRC file to write
+        """
+        pcbnew.WriteDRCReport(
+            self.pcb,
+            f"{filename}_drc.txt",
+            pcbnew.EDA_UNITS_MILLIMETRES,
+            False)
 
     def export_gerber(self, filename):
         """ Export the design to gerbers / drill file
@@ -601,19 +627,13 @@ class CircuitPainter:
 
         filename: Name of zip file to write to
         """
-        from tempfile import TemporaryDirectory
-        import subprocess
-        import glob
-        import os
+        self.fill_zones()
 
         with TemporaryDirectory() as tmpdir_kicad, TemporaryDirectory() as tmpdir_gerber:
-
             # Write the kicad pcb out to a temporary location
             self.save(f"{tmpdir_kicad}/{filename}")
 
             # Generate gerbers to yet another location
-            # TODO: repour zones
-            # TODO: DRC?
             # TODO: use drill origin, remove empty layers?
             subprocess.check_call(["kicad-cli",
                                    "pcb",
@@ -638,4 +658,4 @@ class CircuitPainter:
                 os.remove(f"{filename}.zip")
 
             subprocess.check_call(
-                ["zip", f"{filename}.zip", *files])
+                ["zip", f"{filename}_gerbers.zip", *files])
