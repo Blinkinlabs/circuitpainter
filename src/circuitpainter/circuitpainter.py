@@ -116,14 +116,13 @@ class CircuitPainter:
         # Keep a list of all components added to the board
         self.uuids = []
 
-        # Workaround to enable some hidden state. Calling WriteDRCReport()
-        # fixes something, that then allows the zone_filler to properly apply
-        # (at least) board clearance rules.
-        pcbnew.WriteDRCReport(
-            self.pcb,
-            f"{self.tempdir.name}/.drc",
-            pcbnew.EDA_UNITS_MILLIMETRES,
-            False)
+        # Workaround for another issue: https://gitlab.com/kicad/code/kicad/-/issues/14901
+        # We can only run DRC once, but if any DRC settings are updated with
+        # GetDesignSettings(), the magic DRC function has to be run afterwards
+        # in order to apply them. So we can't run DRC during init, because
+        # it would prevent modifying the design rules. Instead, we run the DRC
+        # once before the fill_zones command is called.
+        self.is_drc_run = False
 
     def width(self, width):
         """ Set the width to use for drawing commands
@@ -595,8 +594,16 @@ class CircuitPainter:
         This is performed automatically by the save, preview, drc, and
         export_gerber functions.
         """
-        # Note: See workaround in __init__ that allows board outline
-        # clearance to work properly!
+        # Workaround to enable some hidden state. Calling WriteDRCReport()
+        # fixes something, that then allows the zone_filler to properly apply
+        # (at least) board clearance rules.
+        if not self.is_drc_run:
+            pcbnew.WriteDRCReport(
+                self.pcb,
+                f"{self.tempdir.name}/.drc",
+                pcbnew.EDA_UNITS_MILLIMETRES,
+                False)
+            self.is_drc_run = True
 
         # Re-build connectivity, otherwise the zone filler won't connect
         # zones to objects with the same net names
@@ -627,18 +634,18 @@ class CircuitPainter:
             self.save(f"{tmpdir}/preview")
             subprocess.check_call(["pcbnew", f"{tmpdir}/preview.kicad_pcb"])
 
-    def drc(self, filename):
-        """ Run the DRC tool, and save the output to a file
-
-        filename: Name of DRC file to write
-        """
-        self.fill_zones()
-
-        pcbnew.WriteDRCReport(
-            self.pcb,
-            f"{filename}_drc.txt",
-            pcbnew.EDA_UNITS_MILLIMETRES,
-            False)
+#    def drc(self, filename):
+#        """ Run the DRC tool, and save the output to a file
+#
+#        filename: Name of DRC file to write
+#        """
+#        self.fill_zones()
+#
+#        pcbnew.WriteDRCReport(
+#            self.pcb,
+#            f"{filename}_drc.txt",
+#            pcbnew.EDA_UNITS_MILLIMETRES,
+#            False)
 
     def export_gerber(self, filename):
         """ Export the design to gerbers / drill file
