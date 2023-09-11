@@ -79,12 +79,12 @@ class CircuitPainter:
         "Rescue": pcbnew.Rescue,
     }
 
-    def __init__(self, filename=None, libpath=None):
+    def __init__(self, filename=None, library_path="/usr/share/kicad/footprints"):
         """ Create a Circuit Builder context
 
         pcb: (optional) If specified, work with the given PCB. If not
              specified, start with a blank PCB
-        libpath: (optional) Path to the footprint libraries
+        library_path: (optional) Path to the footprint libraries
         """
 
         if filename is not None:
@@ -97,10 +97,7 @@ class CircuitPainter:
             self.filename = f"{self.tempdir.name}/board.kicad_pcb"
             self.pcb = pcbnew.NewBoard(self.filename)
 
-        if libpath is not None:
-            self.library_base = libpath
-        else:
-            self.library_base = "/usr/share/kicad/footprints/"
+        self.library_path = library_path
 
         self.transform = TransformMatrix()
         self.next_designator = 1
@@ -370,7 +367,8 @@ class CircuitPainter:
             name,
             reference=None,
             angle=0,
-            nets=None):
+            nets=None,
+            library_path=None):
         """ Place a footprint
 
         Places a footprint from the given library onto the board
@@ -378,7 +376,7 @@ class CircuitPainter:
         x: x coordinate (mm)
         y: y coordinate (mm)
         library: Library name, relative to the system library path. To change
-                 the system library path, edit the 'library_base' variable.
+                 the system library path, edit the 'library_path' variable.
                  For example: 'LED_SMD'
         name: Part name, for example: LED_1210_3225Metric
         reference: (optional) Reference designator to assign to part. For
@@ -396,10 +394,16 @@ class CircuitPainter:
             reference = f'P_{self.next_designator}'
             self.next_designator += 1
 
+        if library_path is None:
+            library_path = self.library_path
+
         # TODO: This creates DRC warinings; possibly the footprint needs to be loaded through
         # library that's already linked to the project?
         footprint = pcbnew.FootprintLoad(
-            self.library_base + library + ".pretty", name)
+            f"{library_path}/{library}.pretty", name)
+        if footprint is None:
+            raise IOError(f"Footprint {name} in library:{library_path}/{library}.pretty not found")
+
         footprint.SetPosition(self._local_to_world(x, y))
         footprint.SetOrientation(
             pcbnew.EDA_ANGLE(
@@ -581,7 +585,19 @@ class CircuitPainter:
 
         This is performed automatically by the save, preview, and
         export_gerber functions.
+
+        Note: This doesn't appear to give the same results as running the
+        same command through the GUI. In particular, the board outline
+        clearance doesn't seem to work.
+
+        It appears that this is calculated at the start of the fill function:
+        https://gitlab.com/kicad/code/kicad/-/blob/master/pcbnew/zone_filler.cpp?ref_type=heads#L112
         """
+
+        # Re-build connectivity, otherwise the zone filler won't connect
+        # zones to objects with the same net names
+        self.pcb.BuildConnectivity()
+
         filler = pcbnew.ZONE_FILLER(self.pcb)
         zones = self.pcb.Zones()
 
@@ -612,6 +628,8 @@ class CircuitPainter:
 
         filename: Name of DRC file to write
         """
+        self.fill_zones()
+
         pcbnew.WriteDRCReport(
             self.pcb,
             f"{filename}_drc.txt",
@@ -654,8 +672,14 @@ class CircuitPainter:
             if os.path.exists(f"{tmpdir_gerber}/{filename}-job.gbrjob"):
                 os.remove(f"{tmpdir_gerber}/{filename}-job.gbrjob")
 
-            if os.path.exists(f"{filename}.zip"):
-                os.remove(f"{filename}.zip")
+            subprocess.check_call(
+                ["zip",
+                 "-j",
+                 f"{filename}_gerbers.zip", *files],
+                cwd=tmpdir_gerber)
 
             subprocess.check_call(
-                ["zip", f"{filename}_gerbers.zip", *files])
+                ["cp",
+                 f"{tmpdir_gerber}/{filename}_gerbers.zip",
+                 "./"])
+
