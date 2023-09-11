@@ -116,6 +116,15 @@ class CircuitPainter:
         # Keep a list of all components added to the board
         self.uuids = []
 
+        # Workaround to enable some hidden state. Calling WriteDRCReport()
+        # fixes something, that then allows the zone_filler to properly apply
+        # (at least) board clearance rules.
+        pcbnew.WriteDRCReport(
+            self.pcb,
+            f"{self.tempdir.name}/.drc",
+            pcbnew.EDA_UNITS_MILLIMETRES,
+            False)
+
     def width(self, width):
         """ Set the width to use for drawing commands
 
@@ -583,16 +592,11 @@ class CircuitPainter:
     def fill_zones(self):
         """ Re-pour copper zones on the PCB
 
-        This is performed automatically by the save, preview, and
+        This is performed automatically by the save, preview, drc, and
         export_gerber functions.
-
-        Note: This doesn't appear to give the same results as running the
-        same command through the GUI. In particular, the board outline
-        clearance doesn't seem to work.
-
-        It appears that this is calculated at the start of the fill function:
-        https://gitlab.com/kicad/code/kicad/-/blob/master/pcbnew/zone_filler.cpp?ref_type=heads#L112
         """
+        # Note: See workaround in __init__ that allows board outline
+        # clearance to work properly!
 
         # Re-build connectivity, otherwise the zone filler won't connect
         # zones to objects with the same net names
