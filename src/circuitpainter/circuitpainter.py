@@ -79,7 +79,10 @@ class CircuitPainter:
         "Rescue": pcbnew.Rescue,
     }
 
-    def __init__(self, filename=None, library_path="/usr/share/kicad/footprints"):
+    def __init__(
+            self,
+            filename=None,
+            library_path="/usr/share/kicad/footprints"):
         """ Create a Circuit Builder context
 
         pcb: (optional) If specified, work with the given PCB. If not
@@ -363,7 +366,8 @@ class CircuitPainter:
         segments = int(c / resolution)
 
         angles = [s / segments * 2 * math.pi for s in range(0, segments)]
-        points = [[x + radius*math.cos(a), y + radius*math.sin(a)] for a in angles]
+        points = [[x + radius * math.cos(a),
+                   y + radius * math.sin(a)] for a in angles]
 
         return self.poly_zone(points, net)
 
@@ -410,7 +414,8 @@ class CircuitPainter:
         footprint = pcbnew.FootprintLoad(
             f"{library_path}/{library}.pretty", name)
         if footprint is None:
-            raise IOError(f"Footprint {name} in library:{library_path}/{library}.pretty not found")
+            raise IOError(
+                f"Footprint {name} in library:{library_path}/{library}.pretty not found")
 
         footprint.SetPosition(self._local_to_world(x, y))
         footprint.SetOrientation(
@@ -623,7 +628,7 @@ class CircuitPainter:
         y = boundary.GetY() + boundary.GetHeight()
 
         settings = self.pcb.GetDesignSettings()
-        settings.SetAuxOrigin(pcbnew.VECTOR2I(x,y))
+        settings.SetAuxOrigin(pcbnew.VECTOR2I(x, y))
 
     def save(self, filename):
         """ Save the board design to a KiCad board file
@@ -642,7 +647,6 @@ class CircuitPainter:
         """
         self._fill_zones()
         self._auto_set_origin()
-
 
         with TemporaryDirectory() as tmpdir:
             self.save(f"{tmpdir}/preview")
@@ -672,7 +676,6 @@ class CircuitPainter:
         """
         self._fill_zones()
         self._auto_set_origin()
-
 
         with TemporaryDirectory() as tmpdir_kicad, TemporaryDirectory() as tmpdir_gerber:
             # Write the kicad pcb out to a temporary location
@@ -713,4 +716,3 @@ class CircuitPainter:
                 ["cp",
                  f"{tmpdir_gerber}/{filename}_gerbers.zip",
                  "./"])
-
