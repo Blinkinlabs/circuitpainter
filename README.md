@@ -6,8 +6,8 @@ Circuit painter is a creative coding tool for making functional printed
 circuit boards.
 
 Inspired by the simplifed drawing language of Processing, this tool provides
-an environment for drawing basic geometric shapes such as lines, arcs, and
-polygons onto a PCB. The tool maintains a drawing 'context' that applies a
+an environment for designing PCBs using basic geometric shapes such as lines,
+arcs, and polygons. The tool maintains a drawing 'context' that applies a
 translation and rotation matrix to all calls, making it simple to replicate
 circuit features at differnt points across a circuit board. Functional PCB
 components such as part footprints can also be placed, and connected together
