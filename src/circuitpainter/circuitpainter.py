@@ -90,20 +90,21 @@ class CircuitPainter:
         library_path: (optional) Path to the footprint libraries
         """
 
+        self.tempdir = TemporaryDirectory()
+
         if filename is not None:
-            self.pcb = pcbnew.LoadBoard(filename)
             self.filename = filename
+            self.pcb = pcbnew.LoadBoard(filename)
         else:
             # Note: Use NewBoard here because CreateEmptyBoard is buggy, see:
             # https://gitlab.com/kicad/code/kicad/-/issues/15619
-            self.tempdir = TemporaryDirectory()
             self.filename = f"{self.tempdir.name}/board.kicad_pcb"
             self.pcb = pcbnew.NewBoard(self.filename)
 
         self.library_path = library_path
 
         self.transform = TransformMatrix()
-        self.next_designator = 1
+        self.next_designators = {}
 
         # Default draw settings
         self.draw_width = 0.1
@@ -377,7 +378,7 @@ class CircuitPainter:
             y,
             library,
             name,
-            reference=None,
+            reference='P?',
             angle=0,
             nets=None,
             library_path=None):
@@ -391,9 +392,19 @@ class CircuitPainter:
                  the system library path, edit the 'library_path' variable.
                  For example: 'LED_SMD'
         name: Part name, for example: LED_1210_3225Metric
-        reference: (optional) Reference designator to assign to part. For
-                   example: LED1. If the reference designator is not
-                   specified, a generic one will be assigned.
+        reference: (optional) Reference designator to assign to part. There
+                   are three options:
+                   1. If you don't care about the designator, leave this as
+                   the default, and the footprints will be assigned sequential
+                   reference designators P1, P2, ...
+                   2. If you want more conventional naming, specify a leading
+                   portion of the designator followed by a question mark
+                   (for example: LED?), and the footprints will be assigned
+                   sequential reference designators based on their type.
+                   3. If you want to assign sequence numbers yourself,
+                   specify a designator string that does not end in a question
+                   mark (for example: LED3). In this case, the supplied
+                   designator will be used without modification.
         angle: (optional) Angle to rotate the part before placement (degrees)
         nets: (optional) List of nets to assign to the footprint pads, in
               order that they are referenced in the part. Caution: Be sure to
@@ -402,9 +413,10 @@ class CircuitPainter:
               happily make connections that will damage your part.
         """
 
-        if reference is None:
-            reference = f'P_{self.next_designator}'
-            self.next_designator += 1
+        if reference.endswith('?'):
+            designator = self.next_designators.get(reference, 1)
+            self.next_designators[reference] = designator + 1
+            reference = f'{reference[:-1]}{designator}'
 
         if library_path is None:
             library_path = self.library_path
@@ -435,7 +447,14 @@ class CircuitPainter:
             for net, pad in zip(nets, footprint.Pads()):
                 pad.SetNet(self._find_net(net))
 
-        return self._add_item(footprint)
+        self._add_item(footprint)
+
+        # Move the footprint to the back side if we are on the B_Cu layer
+        # TODO: do this based on the 'side' of the current layer?
+        if self.draw_layer == 'B_Cu':
+            footprint.SetLayerAndFlip(self.layers['B_Cu'])
+
+        return footprint
 
     def get_pads(self, reference):
         """ Get a list of the pads in the specified footprint
@@ -682,7 +701,7 @@ class CircuitPainter:
             self.save(f"{tmpdir_kicad}/{filename}")
 
             # Generate gerbers to yet another location
-            # TODO: use drill origin, remove empty layers?
+            # TODO: Remove empty layers?
             subprocess.check_call(["kicad-cli",
                                    "pcb",
                                    "export",
@@ -716,3 +735,31 @@ class CircuitPainter:
                 ["cp",
                  f"{tmpdir_gerber}/{filename}_gerbers.zip",
                  "./"])
+
+    def export_svg(self, filename):
+        """ Export the design to an SVG
+
+        This saves the file to a temporary loation, uses the kicad command
+        line interface to render an svg, then copies it to the specified
+        location
+
+        filename: Name of zip file to write to
+        """
+        self._fill_zones()
+        self._auto_set_origin()
+
+        with TemporaryDirectory() as tmpdir_kicad:
+            # Write the kicad pcb out to a temporary location
+            self.save(f"{tmpdir_kicad}/{filename}")
+
+            subprocess.check_call(["kicad-cli",
+                                   "pcb",
+                                   "export",
+                                   "svg",
+                                   "--page-size-mode",
+                                   "2",
+                                   "--exclude-drawing-sheet",
+                                   "-l",
+                                   ','.join([i.replace('_',
+                                                       '.') for i in self.layers.keys()]),
+                                   f"{tmpdir_kicad}/{filename}.kicad_pcb"])
