@@ -41,13 +41,25 @@ footprints, and text onto the PCB.
 First, set the layer to place the object on (tip: use
 print(painter.layers.keys()) to show all available layers):
 
-	painter.set_layer('F_SilkS')
+	painter.layer('F_SilkS')
 
 Next, draw some non-conductive objects:
 
 	painter.circle(0,0,3) # Draw a circle with radius 3 at the board origin
-	painter.line(0,0,10,0) # Draw a line from the board origin to (10,10)
+	painter.line(0,0,10,10) # Draw a line from the board origin to (10,10)
 	painter.circle(10,10,3) # Draw a circle with raidus 3 at position (10,10)
+
+So far, there hasn't been any visual indication of what you're making.
+To get a preview of what your design looks like, use the preview()
+function:
+
+	painter.preview()
+
+This will save the design to a temporary location, then open it in the
+KiCad editor. It's good for seeing the project, but be careful! The file
+will be deleted (along with any changes you make), as soon as you close
+the window. If you do want to save your board at this time, use the 'Save As'
+feature before exiting the editor!
 
 To change the width of lines, use the width() command:
 
@@ -84,7 +96,6 @@ and pop_matrix(). (Note: This is implemented as a stack, and multiple pushes can
 	painter.rect(-5,-5,5,5) # Rectangle is drawn at a 30 degreen angle, centered at (10,10).
 	painter.pop_matrix() # Restore previous transformation settigns
 	painter.rect(-5,-5,5,5) # Rectangle is drawn centered at (10,10).
-
 
 For more complete examples, see the scripts in the examples directory.
 
