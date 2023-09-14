@@ -278,9 +278,11 @@ New objects will then be added to that board, in a new group.
 
 Wishlist:
 
+* Cooler examples: Fractals such as Apollonian gasket, Sierpinski triangles, Fibonacci spirals?
 * Font configuration: Configure a text-type, and have it auto-apply whenever text is drawn (similar to this: https://processing.org/reference/textFont_.html )
 * Some way to generate schematics, even if they are terrible and just have each component drawn out separtely, with small wires and net names on each port.
 * Place components on path: tool for placing evenly-spaced footprints along a path
+* 'Fill' region with equally-spaced or patterned components
 
 Similar nontraditional PCB design tools:
 
