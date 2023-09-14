@@ -274,6 +274,18 @@ Circuit Painter by passing it the file name:
 
 New objects will then be added to that board, in a new group.
 
+# Notes
+
+Wishlist:
+
+* Font configuration: Configure a text-type, and have it auto-apply whenever text is drawn (similar to this: https://processing.org/reference/textFont_.html )
+* Some way to generate schematics, even if they are terrible and just have each component drawn out separtely, with small wires and net names on each port.
+
+Similar nontraditional PCB design tools:
+
+* [SVG-PCB](https://leomcelroy.com/svg-pcb-website/)
+* [SVG2Shenzhen](https://github.com/badgeek/svg2shenzhen)
+
 # Credits
 
 CircuitPainter is a simplified interface for KiCad's
