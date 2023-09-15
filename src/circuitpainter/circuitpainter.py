@@ -612,6 +612,35 @@ class CircuitPainter:
 
         return self._add_item(text)
 
+    def dimension(self, x1, y1, x2, y2, height):
+        """ Draw a linear dimension line
+
+        Dimension lines can be used to document importanat sizes or spacings
+        between objects. They aren't needed by a computer to process the
+        board files, but are helpful for humans who are inspecting board
+        files. Common things that you might want to add dimensions for are
+        the bounding box of the PCB edges (to show how big the PCB is), or
+        distances between a reference point and mounting holes or test points.
+
+        Dimension lines are usually placed on the 'Dwgs_User' layer.
+
+        x1,y1: starting point (mm)
+        x2,y2: eneding point (mm)
+        height: Spacing between measured points and dimension line
+        """
+
+        dim = pcbnew.PCB_DIM_ALIGNED(self.pcb, pcbnew.PCB_DIM_ALIGNED_T)
+
+        dim.SetStart(self._local_to_world(x1, y1))
+        dim.SetEnd(self._local_to_world(x2, y2))
+        dim.SetHeight(pcbnew.FromMM(height))
+
+        dim.SetPrecision(pcbnew.DIM_PRECISION_X_XX)
+        dim.SetUnits(pcbnew.EDA_UNITS_MILLIMETRES)
+        dim.SetUnitsMode(pcbnew.DIM_UNITS_MODE_MILLIMETRES)
+
+        return self._add_item(dim)
+
     def _fill_zones(self):
         """ Re-pour copper zones on the PCB
 
@@ -699,7 +728,7 @@ class CircuitPainter:
         # Map pcbnew layer names to a format recognized by kicad-cli
         # Note that if the layer list is empty, kicad-cli will choose some
         # default set automatically
-        layers_csv = ','.join(layers).replace('_','.')
+        layers_csv = ','.join(layers).replace('_', '.')
 
         with TemporaryDirectory() as tmpdir_kicad, TemporaryDirectory() as tmpdir_gerber:
             # Write the kicad pcb out to a temporary location
