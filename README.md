@@ -164,7 +164,7 @@ the previous translation operations, to make a ring of LEDs:
 
 Not bad for a few lines of code!
 
-To make a complete board, here is the rest of the owl:
+To make a complete board, here is the [rest of the owl](https://knowyourmeme.com/memes/how-to-draw-an-owl):
 
 	from circuitpainter import CircuitPainter
 	painter = CircuitPainter()
