@@ -684,7 +684,7 @@ class CircuitPainter:
 #            pcbnew.EDA_UNITS_MILLIMETRES,
 #            False)
 
-    def export_gerber(self, filename):
+    def export_gerber(self, filename, layers=[]):
         """ Export the design to gerbers / drill file
 
         This saves the file to a temporary loation, uses the kicad command
@@ -695,6 +695,11 @@ class CircuitPainter:
         """
         self._fill_zones()
         self._auto_set_origin()
+
+        # Map pcbnew layer names to a format recognized by kicad-cli
+        # Note that if the layer list is empty, kicad-cli will choose some
+        # default set automatically
+        layers_csv = ','.join(layers).replace('_','.')
 
         with TemporaryDirectory() as tmpdir_kicad, TemporaryDirectory() as tmpdir_gerber:
             # Write the kicad pcb out to a temporary location
@@ -707,6 +712,8 @@ class CircuitPainter:
                                    "export",
                                    "gerbers",
                                    "--use-drill-file-origin",
+                                   "-l",
+                                   layers_csv,
                                    f"{tmpdir_kicad}/{filename}.kicad_pcb"],
                                   cwd=tmpdir_gerber)
             subprocess.check_call(["kicad-cli",
