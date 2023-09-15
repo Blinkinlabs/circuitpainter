@@ -13,7 +13,7 @@ circuit features at differnt points across a circuit board. Functional PCB
 components such as part footprints can also be placed, and connected together
 logically using 'nets'.
 
-Circuit painter works as a front end / wrapper for KiCad's pcbnew.
+Circuit painter works as a front end / wrapper for [KiCad's pcbnew](https://www.kicad.org/).
 
 # Installation
 
