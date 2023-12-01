@@ -1,4 +1,4 @@
-from circuitpainter import CircuitPainter
+from circuitpainter import CircuitPainter, FixedPoint
 import math
 
 def asterix(arms,leds_per_arm):
@@ -82,21 +82,17 @@ def asterix(arms,leds_per_arm):
 
         # Connect previous data line
         if arm != arms-1:
-            last_local = painter._world_to_local(lastDataCoord[0],lastDataCoord[1])
-            painter.track(last_local[0],last_local[1],-1,arm_width/2-1)
-
+            painter.track(*last_point,-1,arm_width/2-1)
 
         # Bring final data line back to asterix center
         if arm != 0:
             last_pad = painter.get_object_position(painter.get_pads(f"LED{arm_led_nums[-1]}")[1])
             painter.track(last_pad[0],last_pad[1],last_pad[0],-arm_width/2+1)
             painter.track(last_pad[0],-arm_width/2+1,-1,-arm_width/2+1)
-            lastDataCoord = painter._local_to_world(-1,-arm_width/2+1)
-
-
+            last_point = FixedPoint(painter,-1,-arm_width/2+1)
 
         painter.pop_matrix()
 
-    painter.save("asterix")
+    painter.preview()
 
 asterix(25,12)

@@ -2,4 +2,4 @@
 
 __version__ = "0.0.5"
 
-from .circuitpainter import CircuitPainter
+from .circuitpainter import CircuitPainter, FixedPoint

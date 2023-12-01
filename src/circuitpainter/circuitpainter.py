@@ -14,6 +14,40 @@ from circuitpainter.transform_matrix import TransformMatrix
 # https://github.com/cooked/kimotor/blob/master/kimotor_action.py
 
 
+class FixedPoint:
+    """ Fixed point class, stores a fixed board position
+
+    The point represented by this class is fixed to an absolute ('world')
+    coordinate, and will stay in the same spot regardless of the current
+    transform that has been applied by push_matrix() and pop_matrix().
+
+    The point class is iterable, so you can get the values from it directly
+    using *, as well as through the pos() function.
+    """
+
+    def __init__(self,painter, x, y, world=False):
+        """ Create a fixed-position point
+
+        x, y: point position (mm)
+        world: (optional, default False) If True, interpret the x, y
+            coordinates as absolute positions.
+        """
+        self.painter = painter
+
+        if world:
+            self.x, self.y = x, y
+        else:
+            self.x, self.y = painter.transform.project(x,y)
+
+    def pos(self):
+        """ Get the point coordinates, in the local coordinate system"""
+        return self.painter.transform.inverse_project(self.x, self.y)
+
+    def __iter__(self):
+        local_coords = self.pos()
+        return (i for i in local_coords)
+
+
 class CircuitPainter:
     # Board layers, from pcbnew
     layers = {
