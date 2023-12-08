@@ -779,7 +779,7 @@ class CircuitPainter:
         line interface to render an svg, then copies it to the specified
         location
 
-        filename: Name of zip file to write to
+        filename: Name of output file
         """
         self._fill_zones()
         self._auto_set_origin()
@@ -798,4 +798,30 @@ class CircuitPainter:
                                    "-l",
                                    ','.join([i.replace('_',
                                                        '.') for i in self.layers.keys()]),
+                                   f"{tmpdir_kicad}/{filename}.kicad_pcb"])
+
+    def export_pos(self, filename):
+        """ Export a pick-and-place file
+
+        This saves the file to a temporary loation, uses the kicad command
+        line interface to render a pnp file, then copies it to the specified
+        location
+
+        filename: Name of output file
+        """
+        self._fill_zones()
+        self._auto_set_origin()
+
+        with TemporaryDirectory() as tmpdir_kicad:
+            # Write the kicad pcb out to a temporary location
+            self.save(f"{tmpdir_kicad}/{filename}")
+
+            subprocess.check_call(["kicad-cli",
+                                   "pcb",
+                                   "export",
+                                   "pos",
+                                   "--format","csv",
+                                   "--units","mm",
+                                   "--bottom-negate-x",
+                                   "--use-drill-file-origin",
                                    f"{tmpdir_kicad}/{filename}.kicad_pcb"])
