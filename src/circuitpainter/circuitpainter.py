@@ -824,4 +824,5 @@ class CircuitPainter:
                                    "--units","mm",
                                    "--bottom-negate-x",
                                    "--use-drill-file-origin",
+                                   "--output", f"{filename}_pos.csv",
                                    f"{tmpdir_kicad}/{filename}.kicad_pcb"])
