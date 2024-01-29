@@ -4,6 +4,7 @@ import math
 import subprocess
 import glob
 import os
+from pathlib import Path
 from tempfile import TemporaryDirectory
 import pcbnew
 from circuitpainter.transform_matrix import TransformMatrix
@@ -730,9 +731,11 @@ class CircuitPainter:
         # default set automatically
         layers_csv = ','.join(layers).replace('_', '.')
 
+        file_stem = Path(filename).name
+
         with TemporaryDirectory() as tmpdir_kicad, TemporaryDirectory() as tmpdir_gerber:
             # Write the kicad pcb out to a temporary location
-            self.save(f"{tmpdir_kicad}/{filename}")
+            self.save(f"{tmpdir_kicad}/{file_stem}")
 
             # Generate gerbers to yet another location
             # TODO: Remove empty layers?
@@ -743,7 +746,7 @@ class CircuitPainter:
                                    "--use-drill-file-origin",
                                    "-l",
                                    layers_csv,
-                                   f"{tmpdir_kicad}/{filename}.kicad_pcb"],
+                                   f"{tmpdir_kicad}/{file_stem}.kicad_pcb"],
                                   cwd=tmpdir_gerber)
             subprocess.check_call(["kicad-cli",
                                    "pcb",
@@ -751,12 +754,12 @@ class CircuitPainter:
                                    "drill",
                                    "--drill-origin",
                                    "plot",
-                                   f"{tmpdir_kicad}/{filename}.kicad_pcb"],
+                                   f"{tmpdir_kicad}/{file_stem}.kicad_pcb"],
                                   cwd=tmpdir_gerber)
 
             # Don't copy the gbrjob file
-            if os.path.exists(f"{tmpdir_gerber}/{filename}-job.gbrjob"):
-                os.remove(f"{tmpdir_gerber}/{filename}-job.gbrjob")
+            if os.path.exists(f"{tmpdir_gerber}/{file_stem}-job.gbrjob"):
+                os.remove(f"{tmpdir_gerber}/{file_stem}-job.gbrjob")
 
             # Zip up the gerbers
             files = glob.glob(f"{tmpdir_gerber}/*")
@@ -764,13 +767,13 @@ class CircuitPainter:
             subprocess.check_call(
                 ["zip",
                  "-j",
-                 f"{filename}_gerbers.zip", *files],
+                 f"{file_stem}_gerbers.zip", *files],
                 cwd=tmpdir_gerber)
 
             subprocess.check_call(
                 ["cp",
-                 f"{tmpdir_gerber}/{filename}_gerbers.zip",
-                 "./"])
+                 f"{tmpdir_gerber}/{file_stem}_gerbers.zip",
+                 f"{filename}.zip"])
 
     def export_svg(self, filename):
         """ Export the design to an SVG
@@ -784,9 +787,11 @@ class CircuitPainter:
         self._fill_zones()
         self._auto_set_origin()
 
+        file_stem = Path(filename).name
+
         with TemporaryDirectory() as tmpdir_kicad:
             # Write the kicad pcb out to a temporary location
-            self.save(f"{tmpdir_kicad}/{filename}")
+            self.save(f"{tmpdir_kicad}/{file_stem}")
 
             subprocess.check_call(["kicad-cli",
                                    "pcb",
@@ -798,7 +803,7 @@ class CircuitPainter:
                                    "-l",
                                    ','.join([i.replace('_',
                                                        '.') for i in self.layers.keys()]),
-                                   f"{tmpdir_kicad}/{filename}.kicad_pcb"])
+                                   f"{tmpdir_kicad}/{file_stem}.kicad_pcb"])
 
     def export_pos(self, filename):
         """ Export a pick-and-place file
@@ -812,9 +817,11 @@ class CircuitPainter:
         self._fill_zones()
         self._auto_set_origin()
 
+        file_stem = Path(filename).name
+
         with TemporaryDirectory() as tmpdir_kicad:
             # Write the kicad pcb out to a temporary location
-            self.save(f"{tmpdir_kicad}/{filename}")
+            self.save(f"{tmpdir_kicad}/{file_stem}")
 
             subprocess.check_call(["kicad-cli",
                                    "pcb",
@@ -825,4 +832,4 @@ class CircuitPainter:
                                    "--bottom-negate-x",
                                    "--use-drill-file-origin",
                                    "--output", f"{filename}_pos.csv",
-                                   f"{tmpdir_kicad}/{filename}.kicad_pcb"])
+                                   f"{tmpdir_kicad}/{file_stem}.kicad_pcb"])
