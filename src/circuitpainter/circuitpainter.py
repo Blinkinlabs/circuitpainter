@@ -4,6 +4,7 @@ import math
 import subprocess
 import glob
 import os
+import platform
 from pathlib import Path
 from tempfile import TemporaryDirectory
 import pcbnew
@@ -14,6 +15,18 @@ from circuitpainter.transform_matrix import TransformMatrix
 # https://github.com/KiCad/kicad-source-mirror/tree/master/pcbnew
 # https://github.com/cooked/kimotor/blob/master/kimotor_action.py
 
+
+def _guess_footprint_library_path():
+    """Attempt to find the KiCad footprint library"""
+
+    system = platform.system()
+
+    if system == "Linux":
+        return "/usr/share/kicad/footprints"
+    elif system == "Windows":
+        return "C:\\Program Files\\KiCad\\7.0\\share\\kicad\\footprints"
+    else:
+        return 
 
 class CircuitPainter:
     # Board layers, from pcbnew
@@ -83,13 +96,16 @@ class CircuitPainter:
     def __init__(
             self,
             filename=None,
-            library_path="/usr/share/kicad/footprints"):
+            library_path=None):
         """ Create a Circuit Builder context
 
         pcb: (optional) If specified, work with the given PCB. If not
              specified, start with a blank PCB
         library_path: (optional) Path to the footprint libraries
         """
+
+        if library_path==None:
+            library_path = _guess_footprint_library_path()
 
         self.tempdir = TemporaryDirectory()
 
