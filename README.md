@@ -1,6 +1,6 @@
 # Circuit Painter
 
-![](doc/asterisk.png)
+![](doc/lotus_leds.png)
 
 Circuit painter is a creative coding tool for making functional printed
 circuit boards.
