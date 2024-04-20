@@ -821,6 +821,38 @@ class CircuitPainter:
                                                        '.') for i in self.layers.keys()]),
                                    f"{tmpdir_kicad}/{file_stem}.kicad_pcb"])
 
+    def export_step(self, filename):
+        """ Export the design to an STEP file
+
+        This saves the file to a temporary loation, uses the kicad command
+        line interface to render a step file, then copies it to the specified
+        location
+
+        filename: Name of output file
+        """
+        self._fill_zones()
+        self._auto_set_origin()
+
+        file_stem = Path(filename).name
+
+        with TemporaryDirectory() as tmpdir_kicad:
+            # Write the kicad pcb out to a temporary location
+            self.save(f"{tmpdir_kicad}/{file_stem}")
+
+            subprocess.check_call(["kicad-cli",
+                                   "pcb",
+                                   "export",
+                                   "step",
+                                   "--drill-origin",
+                                   "--output", f"{file_stem}.step",
+                                   f"{file_stem}.kicad_pcb"],
+                                  cwd=f"{tmpdir_kicad}")
+
+            subprocess.check_call(
+                ["cp",
+                 f"{tmpdir_kicad}/{file_stem}.step",
+                 f"{filename}.step"])
+
     def export_pos(self, filename):
         """ Export a pick-and-place file
 
