@@ -7,6 +7,7 @@ import os
 import platform
 from pathlib import Path
 from tempfile import TemporaryDirectory
+import zipfile
 import pcbnew
 from circuitpainter.transform_matrix import TransformMatrix
 
@@ -26,7 +27,24 @@ def _guess_footprint_library_path():
     elif system == "Windows":
         return "C:\\Program Files\\KiCad\\7.0\\share\\kicad\\footprints"
     else:
-        return 
+        return
+
+def _make_zip(output_name, filenames):
+    """Create a zip file
+
+    Create a zip file containing the given files. The files will be written to
+    the root directory of the zip, with any relative paths stripped.
+
+    output_name: Name of the output zip file (will be overwritten if exists)
+    filenames: Full paths of files to write to the zip file
+    """
+    with zipfile.ZipFile(output_name,'w') as of:
+        for filename in filenames:
+            path = Path(filename)
+            of.write(filename,
+                     arcname=path.name,
+                     compress_type=zipfile.ZIP_DEFLATED,
+                     compresslevel=5)
 
 class CircuitPainter:
     # Board layers, from pcbnew
@@ -749,9 +767,13 @@ class CircuitPainter:
 
         file_stem = Path(filename).name
 
-        with TemporaryDirectory() as tmpdir_kicad, TemporaryDirectory() as tmpdir_gerber:
+        with TemporaryDirectory() as tmpdir_kicad:
+            gerberdir = f"{tmpdir_kicad}/gerber"
+
             # Write the kicad pcb out to a temporary location
             self.save(f"{tmpdir_kicad}/{file_stem}")
+
+            os.mkdir(gerberdir)
 
             # Generate gerbers to yet another location
             # TODO: Remove empty layers?
@@ -763,7 +785,7 @@ class CircuitPainter:
                                    "-l",
                                    layers_csv,
                                    f"{tmpdir_kicad}/{file_stem}.kicad_pcb"],
-                                  cwd=tmpdir_gerber)
+                                  cwd=gerberdir)
             subprocess.check_call(["kicad-cli",
                                    "pcb",
                                    "export",
@@ -771,25 +793,15 @@ class CircuitPainter:
                                    "--drill-origin",
                                    "plot",
                                    f"{tmpdir_kicad}/{file_stem}.kicad_pcb"],
-                                  cwd=tmpdir_gerber)
+                                  cwd=gerberdir)
 
             # Don't copy the gbrjob file
-            if os.path.exists(f"{tmpdir_gerber}/{file_stem}-job.gbrjob"):
-                os.remove(f"{tmpdir_gerber}/{file_stem}-job.gbrjob")
+            if os.path.exists(f"{gerberdir}/{file_stem}-job.gbrjob"):
+                os.remove(f"{gerberdir}/{file_stem}-job.gbrjob")
 
             # Zip up the gerbers
-            files = glob.glob(f"{tmpdir_gerber}/*")
-
-            subprocess.check_call(
-                ["zip",
-                 "-j",
-                 f"{file_stem}_gerbers.zip", *files],
-                cwd=tmpdir_gerber)
-
-            subprocess.check_call(
-                ["cp",
-                 f"{tmpdir_gerber}/{file_stem}_gerbers.zip",
-                 f"{filename}.zip"])
+            files = glob.glob(f"{gerberdir}/*")
+            _make_zip(f"{filename}.zip", files)
 
     def export_svg(self, filename):
         """ Export the design to an SVG
@@ -845,13 +857,7 @@ class CircuitPainter:
                                    "step",
                                    "--drill-origin",
                                    "--output", f"{file_stem}.step",
-                                   f"{file_stem}.kicad_pcb"],
-                                  cwd=f"{tmpdir_kicad}")
-
-            subprocess.check_call(
-                ["cp",
-                 f"{tmpdir_kicad}/{file_stem}.step",
-                 f"{filename}.step"])
+                                   f"{tmpdir_kicad}/{file_stem}.kicad_pcb"])
 
     def export_pos(self, filename):
         """ Export a pick-and-place file
