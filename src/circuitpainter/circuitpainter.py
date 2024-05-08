@@ -4,6 +4,7 @@ import math
 import subprocess
 import glob
 import os
+import shutil
 import platform
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -833,8 +834,11 @@ class CircuitPainter:
                                    "-l",
                                    ','.join([i.replace('_',
                                                        '.') for i in self.layers.keys()]),
-                                   "--output", f"{output_dir}/{name}.svg",
-                                   f"{tmpdir_kicad}/{name}.kicad_pcb"])
+                                   f"{tmpdir_kicad}/{name}.kicad_pcb"],
+                                  cwd=tmpdir_kicad)
+
+            shutil.copyfile(f"{tmpdir_kicad}/{name}.svg",
+                            f"{output_dir}/{name}.svg")
 
     def export_step(self, name, output_dir = "."):
         """ Export the design to an STEP file
@@ -860,8 +864,12 @@ class CircuitPainter:
                                    "export",
                                    "step",
                                    "--drill-origin",
-                                   "--output", f"{output_dir}/{name}.step",
-                                   f"{tmpdir_kicad}/{name}.kicad_pcb"])
+                                   "--output", f"{name}.step",
+                                   f"{tmpdir_kicad}/{name}.kicad_pcb"],
+                                  cwd=tmpdir_kicad)
+
+            shutil.copyfile(f"{tmpdir_kicad}/{name}.step",
+                            f"{output_dir}/{name}.step")
 
     def export_pos(self, name, output_dir='.'):
         """ Export a pick-and-place file
@@ -890,5 +898,9 @@ class CircuitPainter:
                                    "--units","mm",
                                    "--bottom-negate-x",
                                    "--use-drill-file-origin",
-                                   "--output", f"{output_dir}/{name}_pos.csv",
-                                   f"{tmpdir_kicad}/{name}.kicad_pcb"])
+                                   "--output", f"{name}_pos.csv",
+                                   f"{tmpdir_kicad}/{name}.kicad_pcb"],
+                                  cwd=tmpdir_kicad)
+
+            shutil.copyfile(f"{tmpdir_kicad}/{name}_pos.csv",
+                            f"{output_dir}/{name}_pos.csv")
