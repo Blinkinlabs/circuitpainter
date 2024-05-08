@@ -748,14 +748,15 @@ class CircuitPainter:
 #            pcbnew.EDA_UNITS_MILLIMETRES,
 #            False)
 
-    def export_gerber(self, filename, layers=[]):
+    def export_gerber(self, name, output_dir='.', layers=[]):
         """ Export the design to gerbers / drill file
 
         This saves the file to a temporary loation, uses the kicad command
         line interface to render gerber outputs, and finally places the
         gerbers in a zip file.
 
-        filename: Name of zip file to write to
+        name: Name of zip file to write to
+        directory: (optional) Directory to place the file in
         """
         self._fill_zones()
         self._auto_set_origin()
@@ -765,13 +766,13 @@ class CircuitPainter:
         # default set automatically
         layers_csv = ','.join(layers).replace('_', '.')
 
-        file_stem = Path(filename).name
+        output_dir = Path(output_dir).resolve()
 
         with TemporaryDirectory() as tmpdir_kicad:
             gerberdir = f"{tmpdir_kicad}/gerber"
 
             # Write the kicad pcb out to a temporary location
-            self.save(f"{tmpdir_kicad}/{file_stem}")
+            self.save(f"{tmpdir_kicad}/{name}")
 
             os.mkdir(gerberdir)
 
@@ -784,7 +785,7 @@ class CircuitPainter:
                                    "--use-drill-file-origin",
                                    "-l",
                                    layers_csv,
-                                   f"{tmpdir_kicad}/{file_stem}.kicad_pcb"],
+                                   f"{tmpdir_kicad}/{name}.kicad_pcb"],
                                   cwd=gerberdir)
             subprocess.check_call(["kicad-cli",
                                    "pcb",
@@ -792,34 +793,35 @@ class CircuitPainter:
                                    "drill",
                                    "--drill-origin",
                                    "plot",
-                                   f"{tmpdir_kicad}/{file_stem}.kicad_pcb"],
+                                   f"{tmpdir_kicad}/{name}.kicad_pcb"],
                                   cwd=gerberdir)
 
             # Don't copy the gbrjob file
-            if os.path.exists(f"{gerberdir}/{file_stem}-job.gbrjob"):
-                os.remove(f"{gerberdir}/{file_stem}-job.gbrjob")
+            if os.path.exists(f"{gerberdir}/{name}-job.gbrjob"):
+                os.remove(f"{gerberdir}/{name}-job.gbrjob")
 
             # Zip up the gerbers
             files = glob.glob(f"{gerberdir}/*")
-            _make_zip(f"{filename}.zip", files)
+            _make_zip(f"{output_dir}/{name}.zip", files)
 
-    def export_svg(self, filename):
+    def export_svg(self, name, output_dir='.'):
         """ Export the design to an SVG
 
         This saves the file to a temporary loation, uses the kicad command
         line interface to render an svg, then copies it to the specified
         location
 
-        filename: Name of output file
+        name: Name of output file
+        directory: (optional) Directory to place the file in
         """
         self._fill_zones()
         self._auto_set_origin()
 
-        file_stem = Path(filename).name
+        output_dir = Path(output_dir).resolve()
 
         with TemporaryDirectory() as tmpdir_kicad:
             # Write the kicad pcb out to a temporary location
-            self.save(f"{tmpdir_kicad}/{file_stem}")
+            self.save(f"{tmpdir_kicad}/{name}")
 
             subprocess.check_call(["kicad-cli",
                                    "pcb",
@@ -831,51 +833,54 @@ class CircuitPainter:
                                    "-l",
                                    ','.join([i.replace('_',
                                                        '.') for i in self.layers.keys()]),
-                                   f"{tmpdir_kicad}/{file_stem}.kicad_pcb"])
+                                   "--output", f"{output_dir}/{name}.svg",
+                                   f"{tmpdir_kicad}/{name}.kicad_pcb"])
 
-    def export_step(self, filename):
+    def export_step(self, name, output_dir = "."):
         """ Export the design to an STEP file
 
         This saves the file to a temporary loation, uses the kicad command
         line interface to render a step file, then copies it to the specified
         location
 
-        filename: Name of output file
+        name: Name of output file
+        directory: (optional) Directory to place the file in
         """
         self._fill_zones()
         self._auto_set_origin()
 
-        file_stem = Path(filename).name
+        output_dir = Path(output_dir).resolve()
 
         with TemporaryDirectory() as tmpdir_kicad:
             # Write the kicad pcb out to a temporary location
-            self.save(f"{tmpdir_kicad}/{file_stem}")
+            self.save(f"{tmpdir_kicad}/{name}")
 
             subprocess.check_call(["kicad-cli",
                                    "pcb",
                                    "export",
                                    "step",
                                    "--drill-origin",
-                                   "--output", f"{file_stem}.step",
-                                   f"{tmpdir_kicad}/{file_stem}.kicad_pcb"])
+                                   "--output", f"{output_dir}/{name}.step",
+                                   f"{tmpdir_kicad}/{name}.kicad_pcb"])
 
-    def export_pos(self, filename):
+    def export_pos(self, name, output_dir='.'):
         """ Export a pick-and-place file
 
         This saves the file to a temporary loation, uses the kicad command
         line interface to render a pnp file, then copies it to the specified
         location
 
-        filename: Name of output file
+        name: Name of output file
+        directory: (optional) Directory to place the file in
         """
         self._fill_zones()
         self._auto_set_origin()
 
-        file_stem = Path(filename).name
+        output_dir = Path(output_dir).resolve()
 
         with TemporaryDirectory() as tmpdir_kicad:
             # Write the kicad pcb out to a temporary location
-            self.save(f"{tmpdir_kicad}/{file_stem}")
+            self.save(f"{tmpdir_kicad}/{name}")
 
             subprocess.check_call(["kicad-cli",
                                    "pcb",
@@ -885,5 +890,5 @@ class CircuitPainter:
                                    "--units","mm",
                                    "--bottom-negate-x",
                                    "--use-drill-file-origin",
-                                   "--output", f"{filename}_pos.csv",
-                                   f"{tmpdir_kicad}/{file_stem}.kicad_pcb"])
+                                   "--output", f"{output_dir}/{name}_pos.csv",
+                                   f"{tmpdir_kicad}/{name}.kicad_pcb"])
