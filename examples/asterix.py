@@ -1,4 +1,5 @@
 from circuitpainter import CircuitPainter
+from argparse import ArgumentParser
 import math
 
 def asterix(arms,leds_per_arm):
@@ -93,10 +94,21 @@ def asterix(arms,leds_per_arm):
             painter.track(last_pad[0],-arm_width/2+1,-1,-arm_width/2+1)
             lastDataCoord = painter._local_to_world(-1,-arm_width/2+1)
 
-
-
         painter.pop_matrix()
 
-    painter.save("asterix")
+    return painter
 
-asterix(25,12)
+if __name__ == "__main__":
+    parser = ArgumentParser(description="Asterix")
+    parser.add_argument('--arms',type=int,default=25, help="Number of arms")
+    parser.add_argument('--leds',type=int,default=12, help="Number of LEDs per arm")
+    parser.add_argument('--save',action="store_true",help="Save the design to a KiCad file")
+    args = parser.parse_args()
+
+    painter = asterix(args.arms,args.leds)
+    if args.save:
+        painter.export_gerber('asterix')
+    else:
+        painter.preview()
+
+
