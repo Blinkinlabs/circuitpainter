@@ -48,9 +48,43 @@ def _make_zip(output_name, filenames):
                      compresslevel=5)
 
 class CircuitPainter:
-    # Board layers, from pcbnew
+
     layers = {
-        "F_Cu": pcbnew.F_Cu,
+        "Edge_Cuts": pcbnew.Edge_Cuts,  # Board outline
+
+        "F_Cu": pcbnew.F_Cu,            # Front copper
+        "F_SilkS": pcbnew.F_SilkS,      # Front silkscreen
+        "F_Mask": pcbnew.F_Mask,        # Front soldermask
+        "F_Paste": pcbnew.F_Paste,      # Front solder paste
+        "F_Adhes": pcbnew.F_Adhes,      # Front glue
+        "F_CrtYd": pcbnew.F_CrtYd,      # Front component courtyards
+        "F_Fab": pcbnew.F_Fab,          # Front fabrication notes
+
+        "B_Cu": pcbnew.B_Cu,            # Bottom copper
+        "B_SilkS": pcbnew.B_SilkS,      # Bottom silkscreen
+        "B_Mask": pcbnew.B_Mask,        # Bottom soldermask
+        "B_Paste": pcbnew.B_Paste,      # Bottom solder paste
+        "B_Adhes": pcbnew.B_Adhes,      # Bottom glue
+        "B_CrtYd": pcbnew.B_CrtYd,      # Bottom component courtyards
+        "B_Fab": pcbnew.B_Fab,          # Bottom fabrication notes
+        
+        "Dwgs_User": pcbnew.Dwgs_User,  # User drawings: Use for dimensions, etc.
+        "Cmts_User": pcbnew.Cmts_User,
+        "Eco1_User": pcbnew.Eco1_User,
+        "Eco2_User": pcbnew.Eco2_User,
+        "Margin": pcbnew.Margin,
+        "Rescue": pcbnew.Rescue,
+
+        "User_1": pcbnew.User_1,
+        "User_2": pcbnew.User_2,
+        "User_3": pcbnew.User_3,
+        "User_4": pcbnew.User_4,
+        "User_5": pcbnew.User_5,
+        "User_6": pcbnew.User_6,
+        "User_7": pcbnew.User_7,
+        "User_8": pcbnew.User_8,
+        "User_9": pcbnew.User_9,
+
         "In1_Cu": pcbnew.In1_Cu,
         "In2_Cu": pcbnew.In2_Cu,
         "In3_Cu": pcbnew.In3_Cu,
@@ -81,36 +115,11 @@ class CircuitPainter:
         "In28_Cu": pcbnew.In28_Cu,
         "In29_Cu": pcbnew.In29_Cu,
         "In30_Cu": pcbnew.In30_Cu,
-        "B_Cu": pcbnew.B_Cu,
-        "B_Adhes": pcbnew.B_Adhes,
-        "F_Adhes": pcbnew.F_Adhes,
-        "B_Paste": pcbnew.B_Paste,
-        "F_Paste": pcbnew.F_Paste,
-        "B_SilkS": pcbnew.B_SilkS,
-        "F_SilkS": pcbnew.F_SilkS,
-        "B_Mask": pcbnew.B_Mask,
-        "F_Mask": pcbnew.F_Mask,
-        "Dwgs_User": pcbnew.Dwgs_User,
-        "Cmts_User": pcbnew.Cmts_User,
-        "Eco1_User": pcbnew.Eco1_User,
-        "Eco2_User": pcbnew.Eco2_User,
-        "Edge_Cuts": pcbnew.Edge_Cuts,
-        "Margin": pcbnew.Margin,
-        "B_CrtYd": pcbnew.B_CrtYd,
-        "F_CrtYd": pcbnew.F_CrtYd,
-        "B_Fab": pcbnew.B_Fab,
-        "F_Fab": pcbnew.F_Fab,
-        "User_1": pcbnew.User_1,
-        "User_2": pcbnew.User_2,
-        "User_3": pcbnew.User_3,
-        "User_4": pcbnew.User_4,
-        "User_5": pcbnew.User_5,
-        "User_6": pcbnew.User_6,
-        "User_7": pcbnew.User_7,
-        "User_8": pcbnew.User_8,
-        "User_9": pcbnew.User_9,
-        "Rescue": pcbnew.Rescue,
     }
+    """ Board layers, from pcbnew
+
+    see: https://gitlab.com/kicad/code/kicad/-/blob/master/include/layer_ids.h
+    """
 
     def __init__(
             self,
@@ -118,9 +127,9 @@ class CircuitPainter:
             library_path=None):
         """ Create a Circuit Builder context
 
-        pcb: (optional) If specified, work with the given PCB. If not
+        :param filename: (optional) If specified, load the given PCB. If not
              specified, start with a blank PCB
-        library_path: (optional) Path to the footprint libraries
+        :param library_path: (optional) Path to the footprint libraries
         """
 
         if library_path==None:
@@ -169,14 +178,14 @@ class CircuitPainter:
 
         Sets the width for objects like lines, tracks, arcs, etc.
 
-        width: Width (mm)
+        :param width: Width (mm)
         """
         self.draw_width = width
 
     def layer(self, layer):
         """ Set the PCB drawing layer
 
-        layer: Layer to use, for example "F_Cu"
+        :param layer: Layer to use, for example "F_Cu"
         """
         self.draw_layer = layer
 
@@ -215,15 +224,15 @@ class CircuitPainter:
     def translate(self, x, y):
         """ Translate all following graphics commands by the given amounts
 
-        x: x translation (mm)
-        y: y translation (mm)
+        :param x: x translation (mm)
+        :param y: y translation (mm)
         """
         self.transform.translate(x, y)
 
     def rotate(self, angle):
         """ Rotate all following graphics commands by the given angle
 
-        angle: rotation angle (degrees)
+        :param angle: rotation angle (degrees)
         """
 
         self.transform.rotate(angle)
@@ -253,7 +262,7 @@ class CircuitPainter:
 
         Can be a pad, footprint, etc
 
-        o: Object to find coordinate for
+        :param o: Object to find coordinate for
         """
 
         return self._world_to_local(*o.GetPosition())
@@ -269,7 +278,7 @@ class CircuitPainter:
         or if no net with this name exists, it will create one and then return
         a reference to the new net.
 
-        name: Net name (for example: gnd)
+        :param name: Net name (for example: gnd)
         """
 
         net = self.pcb.FindNet(name)
@@ -283,9 +292,11 @@ class CircuitPainter:
     def track(self, x1, y1, x2, y2, net=None):
         """ Place a PCB track
 
-        x1,y1: starting point (mm)
-        x2,y2: ending point (mm)
-        net: (optional) Net to connect track to
+        :param x1: starting point (mm)
+        :param y1: starting point (mm)
+        :param x2: ending point (mm)
+        :param y2: ending point (mm)
+        :param net: (optional) Net to connect track to
         """
 
         track = pcbnew.PCB_TRACK(self.pcb)
@@ -306,11 +317,12 @@ class CircuitPainter:
         track), and the PCB Editor considers it a DRC violation to place
         certain objects (like vias) on them.
 
-        x,y: center of arc (mm)
-        radius: arc radius (mm)
-        start: starting angle of arc (degrees)
-        end: ending angle of arc (degrees)
-        net: (optional) Net to connect track to
+        :param x: center of arc (mm)
+        :param y: center of arc (mm)
+        :param radius: arc radius (mm)
+        :param start: starting angle of arc (degrees)
+        :param end: ending angle of arc (degrees)
+        :param net: (optional) Net to connect track to
         """
         start_x = x + radius * math.cos(math.radians(start))
         start_y = y + radius * math.sin(math.radians(start))
@@ -336,10 +348,11 @@ class CircuitPainter:
     def via(self, x, y, net=None, d=.3, w=.6):
         """ Place a via
 
-        x,y: via coordinate (mm)
-        net: net to connect via to
-        d: (optional) drill diameter (mm)
-        w: (optional) annular ring diameter (mm)
+        :param x: via coordinate (mm)
+        :param y: via coordinate (mm)
+        :param net: (optional) name of net to connect via to
+        :param d: (optional) drill diameter (mm)
+        :param w: (optional) annular ring diameter (mm)
         """
 
         via = pcbnew.PCB_VIA(self.pcb)
@@ -356,8 +369,8 @@ class CircuitPainter:
 
         Zones can be placed on both copper and non-copper layers
 
-        points: List of x,y coordinates that make up the polygon (mm)
-        net: (optional) net to connect zone to.
+        :param points: List of x,y coordinates that make up the polygon (mm)
+        :param net: (optional) name of net to connect zone to.
         """
         p_world = [self._local_to_world(point[0], point[1]) for point in points]
         v = pcbnew.VECTOR_VECTOR2I(p_world)
@@ -376,9 +389,11 @@ class CircuitPainter:
 
         Zones can be placed on both copper and non-copper layers
 
-        x1,y1: first corner of rectangle (mm)
-        x2,y2: second corner of rectangle (mm)
-        net: (optional) net to connect rectangle to
+        :param x1: first corner of rectangle (mm)
+        :param y1: first corner of rectangle (mm)
+        :param x2: second corner of rectangle (mm)
+        :param y2: second corner of rectangle (mm)
+        :param net: (optional) name ofnet to connect rectangle to
         """
 
         points = [[x1, y1], [x1, y2], [x2, y2], [x2, y1]]
@@ -392,9 +407,10 @@ class CircuitPainter:
         Note that the zone is made of a line segments that approximate the
         circle.
 
-        x,y: center of circle (mm)
-        radius: radius of circle (mm)
-        net: (optional) net to connect rectangle to
+        :param x: center of circle (mm)
+        :param y: center of circle (mm)
+        :param radius: radius of circle (mm)
+        :param net: (optional) name of net to connect rectangle to
         """
 
         resolution = 0.5  # approximation resolution, in mm
@@ -422,13 +438,13 @@ class CircuitPainter:
 
         Places a footprint from the given library onto the board
 
-        x: x coordinate (mm)
-        y: y coordinate (mm)
-        library: Library name, relative to the system library path. To change
+        :param x: x coordinate (mm)
+        :param y: y coordinate (mm)
+        :param library: Library name, relative to the system library path. To change
                  the system library path, edit the 'library_path' variable.
                  For example: 'LED_SMD'
-        name: Part name, for example: LED_1210_3225Metric
-        reference: (optional) Reference designator to assign to part. There
+        :param name: Part name, for example: LED_1210_3225Metric
+        :param reference: (optional) Reference designator to assign to part. There
                    are three options:
                    1. If you don't care about the designator, leave this as
                    the default, and the footprints will be assigned sequential
@@ -441,8 +457,8 @@ class CircuitPainter:
                    specify a designator string that does not end in a question
                    mark (for example: LED3). In this case, the supplied
                    designator will be used without modification.
-        angle: (optional) Angle to rotate the part before placement (degrees)
-        nets: (optional) List of nets to assign to the footprint pads, in
+        :param angle: (optional) Angle to rotate the part before placement (degrees)
+        :param nets: (optional) List of nets to assign to the footprint pads, in
               order that they are referenced in the part. Caution: Be sure to
               double check that the right nets are assigned! This script knows
               nothing about how the parts are meant to be used and will
@@ -495,7 +511,7 @@ class CircuitPainter:
     def get_pads(self, reference):
         """ Get a list of the pads in the specified footprint
 
-        reference: Reference designator to retrieve pads from. For example:
+        :param reference: Reference designator to retrieve pads from. For example:
                    LED1
         """
 
@@ -511,8 +527,10 @@ class CircuitPainter:
         A line is a graphical object, and can be used to make a board outline
         soldermask, for example, but not to make a conductive track.
 
-        x1,y1: starting point (mm)
-        x2,y2: eneding point (mm)
+        :param x1: starting point (mm)
+        :param y1: starting point (mm)
+        :param x2: starting point (mm)
+        :param y2: eneding point (mm)
         """
         line = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_SEGMENT)
         line.SetWidth(pcbnew.FromMM(self.draw_width))
@@ -528,10 +546,11 @@ class CircuitPainter:
         An arc is a graphical object, and can be used to make a board outline
         soldermask, for example, but not to make a conductive track.
 
-        x,y: center of arc (mm)
-        radius: arc radius (mm)
-        start: starting angle of arc (degrees)
-        end: ending angle of arc (degrees)
+        :param x: center of arc (mm)
+        :param y: center of arc (mm)
+        :param radius: arc radius (mm)
+        :param start: starting angle of arc (degrees)
+        :param end: ending angle of arc (degrees)
         """
 
         start_x = x + radius * math.cos(math.radians(start))
@@ -555,8 +574,9 @@ class CircuitPainter:
         A circle is a graphical object, and can be used to make a cutout in a
         soldermask, for example, but not to make a conductive track.
 
-        x,y: center of circle (mm)
-        radius: radius of circle (mm)
+        :param x: center of circle (mm)
+        :param y: center of circle (mm)
+        :param radius: radius of circle (mm)
         """
         circle = pcbnew.PCB_SHAPE(self.pcb, pcbnew.SHAPE_T_CIRCLE)
         circle.SetWidth(pcbnew.FromMM(self.draw_width))
@@ -575,7 +595,7 @@ class CircuitPainter:
         A polygon is a graphical object, and can be used to make a cutout in
         a soldermask, for example, but not to make a conductive track.
 
-        points: List of points to add to the polygon (mm)
+        :param points: List of points to add to the polygon (mm)
         """
         points_world = [
             self._local_to_world(
@@ -600,8 +620,10 @@ class CircuitPainter:
         Note: Rectangles are created as polygon objects, so that they can
         support rotation.
 
-        x1,y1: first corner of rectangle (mm)
-        x2,y2: second corner of rectangle (mm)
+        :param x1: first corner of rectangle (mm)
+        :param y1: first corner of rectangle (mm)
+        :param x2: second corner of rectangle (mm)
+        :param y2: second corner of rectangle (mm)
         """
 
         points = [[x1, y1], [x1, y2], [x2, y2], [x2, y1]]
@@ -622,14 +644,14 @@ class CircuitPainter:
         Text is is a graphical object, and can be used to make a cutout in
         a soldermask, for example, but not to make a conductive track.
 
-        x: x coordinate to place text (mm)
-        y: y coordinate to place text (mm)
-        message: Text string to display (single line only)
-        angle: angle to rotate text (degrees)
-        mirrored: If true, draw text backwards
-        bold: If true, use a bold font
-        italic: If true, use an italic font
-        knockout: If true, draw the text as a filled rect with the text cut from the rectangle
+        :param x: x coordinate to place text (mm)
+        :param y: y coordinate to place text (mm)
+        :param message: Text string to display (single line only)
+        :param angle: angle to rotate text (degrees)
+        :param mirrored: If true, draw text backwards
+        :param bold: If true, use a bold font
+        :param italic: If true, use an italic font
+        :param knockout: If true, draw the text as a filled rect with the text cut from the rectangle
         """
 
         text = pcbnew.PCB_TEXT(self.pcb)
@@ -660,9 +682,11 @@ class CircuitPainter:
 
         Dimension lines are usually placed on the 'Dwgs_User' layer.
 
-        x1,y1: starting point (mm)
-        x2,y2: eneding point (mm)
-        height: Spacing between measured points and dimension line
+        :param x1: starting point (mm)
+        :param y1: starting point (mm)
+        :param x2: ending point (mm)
+        :param y2: ending point (mm)
+        :param height: Spacing between measured points and dimension line
         """
 
         dim = pcbnew.PCB_DIM_ALIGNED(self.pcb, pcbnew.PCB_DIM_ALIGNED_T)
@@ -717,7 +741,7 @@ class CircuitPainter:
     def save(self, filename):
         """ Save the board design to a KiCad board file
 
-        filename: File name to write to
+        :param filename: File name to write to
         """
         self._fill_zones()
         self._auto_set_origin()
@@ -756,8 +780,9 @@ class CircuitPainter:
         line interface to render gerber outputs, and finally places the
         gerbers in a zip file.
 
-        name: Name of zip file to write to
-        directory: (optional) Directory to place the file in
+        :param name: Name of zip file to write to
+        :param directory: (optional) Directory to place the file in
+        :param layers: (optional) List of layers to export.
         """
         self._fill_zones()
         self._auto_set_origin()
@@ -812,8 +837,8 @@ class CircuitPainter:
         line interface to render an svg, then copies it to the specified
         location
 
-        name: Name of output file
-        directory: (optional) Directory to place the file in
+        :param name: Name of output file
+        :param directory: (optional) Directory to place the file in
         """
         self._fill_zones()
         self._auto_set_origin()
@@ -847,8 +872,8 @@ class CircuitPainter:
         line interface to render a step file, then copies it to the specified
         location
 
-        name: Name of output file
-        directory: (optional) Directory to place the file in
+        :param name: Name of output file
+        :param directory: (optional) Directory to place the file in
         """
         self._fill_zones()
         self._auto_set_origin()
@@ -878,8 +903,8 @@ class CircuitPainter:
         line interface to render a pnp file, then copies it to the specified
         location
 
-        name: Name of output file
-        directory: (optional) Directory to place the file in
+        :param name: Name of output file
+        :param directory: (optional) Directory to place the file in
         """
         self._fill_zones()
         self._auto_set_origin()
