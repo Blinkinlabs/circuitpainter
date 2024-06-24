@@ -32,8 +32,8 @@ if __name__ == "__main__":
     parser.add_argument('-x',type=int,default=9, help="Number of holes in the x direction")
     parser.add_argument('-y',type=int,default=10, help="Number of holes in the y direction")
     parser.add_argument('-s','--spacing',type=float,default=2.54, help="Spacing between the holes (mm)")
-    parser.add_argument('-d','--hole_diameter',type=float,default=0.8, help="Hole diameter (mm)")
-    parser.add_argument('-r','--ring_diameter',type=float,default=1.2, help="Ring diameter (mm)")
+    parser.add_argument('-d','--hole_diameter',type=float,default=1.02, help="Hole diameter (mm)")
+    parser.add_argument('-r','--ring_diameter',type=float,default=2, help="Ring diameter (mm)")
     parser.add_argument('--save',action="store_true",help="Save the design to a KiCad file")
     args = parser.parse_args()
 
