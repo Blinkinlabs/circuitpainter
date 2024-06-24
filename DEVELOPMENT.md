@@ -12,6 +12,19 @@ This just runs the examples; it doesn't verify their outputs
     rm *.kicad*
     deactivate
 
+## Documentation
+
+Documentation is automatically built when pushing to main, using a github action.
+
+To build it locally:
+
+    python3 -m venv --system-site-packages .venv
+    . .venv/bin/activate
+    pip install -e ../
+    pip install sphinx sphinx_rtd_theme
+    sphinx-build doc _build
+    deactivate
+
 ## Linting
 
     python3 -m venv .venv
