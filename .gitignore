@@ -9,3 +9,5 @@ examples/*.kicad_pcb
 examples/*.kicad_pro
 examples/*.kicad_prl
 examples/fp-info-cache
+doc/_build/*
+_build/*
