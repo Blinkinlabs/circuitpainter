@@ -15,6 +15,8 @@ Similar nontraditional PCB design tools
 
 * `SVG-PCB <https://leomcelroy.com/svg-pcb-website/>`_
 * `SVG2Shenzhen <https://github.com/badgeek/svg2shenzhen>`_
+* `Gingerbread <https://gingerbread.wntr.dev/>`_
+* `Gerbolize <https://github.com/jaseg/gerbolyze>`_
 
 Credits
 -------

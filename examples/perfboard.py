@@ -1,18 +1,18 @@
 from circuitpainter import CircuitPainter
 from argparse import ArgumentParser
 
-def Perfboard(x_count,y_count,x_spacing,y_spacing,hole_d,ring_d):
+def Perfboard(x_count,y_count,spacing,hole_d,ring_d):
     painter = CircuitPainter()
 
     # Make the board shape
     painter.layer("Edge_Cuts")
-    painter.rect(0,0,x_spacing*x_count,y_spacing*y_count)
+    painter.rect(0,0,spacing*x_count,spacing*y_count)
 
     painter.width(0.05)
     painter.fill()
 
-    for x_pos in [x_spacing*(x+0.5) for x in range(0,x_count)]:
-        for y_pos in [y_spacing*(y+0.5) for y in range(0,y_count)]:
+    for x_pos in [spacing*(x+0.5) for x in range(0,x_count)]:
+        for y_pos in [spacing*(y+0.5) for y in range(0,y_count)]:
             painter.layer('F_Cu')
             painter.via(x_pos,y_pos,d=hole_d,w=ring_d)
 
@@ -37,7 +37,7 @@ if __name__ == "__main__":
     parser.add_argument('--save',action="store_true",help="Save the design to a KiCad file")
     args = parser.parse_args()
 
-    painter = Perfboard(args.x, args.y, args.spacing, args.spacing, args.hole_diameter,args.ring_diameter)
+    painter = Perfboard(args.x, args.y, args.spacing, args.hole_diameter,args.ring_diameter)
     if args.save:
         painter.export_gerber('perfboard')
     else:

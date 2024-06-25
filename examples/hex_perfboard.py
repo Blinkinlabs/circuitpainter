@@ -58,16 +58,16 @@ def HexPerfboard(count,spacing,hole_d,ring_d):
     return painter
 
 if __name__ == "__main__":
-    parser = ArgumentParser(description="perfboard generator")
-    parser.add_argument('-x',type=int,default=9, help="Number of holes in the x direction")
+    parser = ArgumentParser(description="hexagonal perfboard generator")
+    parser.add_argument('-c',type=int,default=9, help="Number of hex rings")
     parser.add_argument('-s','--spacing',type=float,default=2.54, help="Spacing between the holes (mm)")
     parser.add_argument('-d','--hole_diameter',type=float,default=1.02, help="Hole diameter (mm)")
     parser.add_argument('-r','--ring_diameter',type=float,default=2, help="Ring diameter (mm)")
     parser.add_argument('--save',action="store_true",help="Save the design to a KiCad file")
     args = parser.parse_args()
 
-    painter = HexPerfboard(args.x, args.spacing, args.hole_diameter,args.ring_diameter)
+    painter = HexPerfboard(args.c, args.spacing, args.hole_diameter,args.ring_diameter)
     if args.save:
-        painter.export_gerber('perfboard')
+        painter.export_gerber('hex_perfboard')
     else:
         painter.preview()

@@ -26,6 +26,13 @@ For more backgrond on the project, see `Matt's Hackaday Berlin talk <https://www
 
 .. toctree::
    :hidden:
+   :caption: Introduction
+
+   introduction
+   concepts
+
+.. toctree::
+   :hidden:
    :caption: Getting Started
 
    installation

@@ -1,5 +1,5 @@
-Examples
-========
+Example Projects
+================
 
 Here is a collection of example boards designed using CircuitPainter.
 
@@ -30,3 +30,14 @@ Click on the photo to see the source code for the board.
          :target: https://github.com/Blinkinlabs/circuitpainter/blob/main/examples/hello_painter.py
 
         Hello Painter
+
+    * - .. image:: _static/images/examples_perfboard.png
+         :width: 400
+         :target: https://github.com/Blinkinlabs/circuitpainter/blob/main/examples/perfboard.py
+
+        Perfboard
+
+      - 
+
+Have you made a board with Circuit Painter? Share it with us so that we can
+add it to the gallery!

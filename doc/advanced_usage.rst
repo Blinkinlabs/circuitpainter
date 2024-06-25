@@ -25,8 +25,9 @@ For example, create a rectangular zone, and save the reference to it:
 
     .. code:: python
 
-        painter.layer("F_Cu") 
-        zone = painter.rect_zone(0,0,10,10)
+        p = CircuitPainter()
+        p.layer("F_Cu") 
+        zone = p.rect_zone(0,0,10,10)
 
 Then, modify the zone properties using the pcbnew api:
 
@@ -48,7 +49,7 @@ with some different DRC settings:
     .. code:: python
         
         import pcbnew
-        settings = painter.pcb.GetDesignSettings()
+        settings = p.pcb.GetDesignSettings()
         settings.SetCopperLayerCount(4) # Change to a 4-layer board design
         settings.m_CopperEdgeClearance = pcbnew.FromMM(0.1) # Set the copper-to-edge spacing to 0.1mm
 
@@ -68,7 +69,7 @@ Circuit Painter by passing it the file name:
 
     .. code:: python
 
-        painter = CircuitPainter('my_file.kicad_pcb')
+        p = CircuitPainter('my_file.kicad_pcb')
 
 New objects will then be added to that board, in a new group.
 
