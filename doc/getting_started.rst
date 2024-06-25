@@ -1,5 +1,10 @@
-Getting Started
-===============
+Getting Started Tutorial
+========================
+
+This tutorial will walk you through some of the basic concepts in Circuit
+Painter. If you haven't set up your environment yet, follow the instructions
+in the :doc:`installation` section, then type the following commands into a
+circuitpainter-enabled Python interpreter.
 
 Start by creating a drawing context:
 
@@ -38,7 +43,7 @@ This will save the design to a temporary location, then open it in the
 KiCad editor:
 
  .. image:: _static/images/example-two-lines.png
-  :width: 400
+  :width: 600
 
 It's good for seeing the project, but be careful! The file
 will be deleted (along with any changes you make), as soon as you close
@@ -57,7 +62,7 @@ To change the width of lines, use the width() command:
 		painter.line(0,10,10,10) # line with width 2mm
 
  .. image:: _static/images/example-line-widths.png
-  :width: 400
+  :width: 600
 
 You can change where and at what angle features are added, by using the
 translate() and rotate() features:
@@ -69,7 +74,7 @@ translate() and rotate() features:
 		painter.rect(-5,-5,5,5) # Rectangle is drawn at a 30 degreen angle, centered at (10,10).
 
  .. image:: _static/images/example-rotate-rect.png
-  :width: 400
+  :width: 600
 
 Calling them multiple times will stack the transformations (they are
 calculated as a 2d transformation matrix)
@@ -84,7 +89,7 @@ calculated as a 2d transformation matrix)
 		painter.rect(-5,-5,5,5) # Rectangle is drawn centered at (30,30).
 
  .. image:: _static/images/example-translate-rect.png
-  :width: 400
+  :width: 600
 
 Saving and restoring the applied tranformation is done using push_matrix()
 and pop_matrix(). (Note: This is implemented as a stack, and multiple pushes can be nested):
@@ -99,7 +104,7 @@ and pop_matrix(). (Note: This is implemented as a stack, and multiple pushes can
 			painter.pop_matrix() # Restore previous transformation settings
 
  .. image:: _static/images/example-push-pop-rect.png
-  :width: 400
+  :width: 600
 
 Besides lines and rectangles, there are other basic shapes such as arc(), cirle(), and polygon().
 
@@ -114,7 +119,7 @@ command:
 		painter.footprint(0,0,"LED_SMD","LED_0805_2012Metric")
 
  .. image:: _static/images/example-add-led.png
-  :width: 400
+  :width: 600
 
 This placed the part, but it won't work well as a part- it's not wired up, so it
 won't actually function! Let's add some nets, and a resistor because that
@@ -130,7 +135,7 @@ your circuit is correct:
 		painter.track(1,0,4,0)
 
  .. image:: _static/images/example-connect-led.png
-  :width: 400
+  :width: 600
 
 Note: In this example, we are manually drawing a track that just happens to line up
 with the centers of the two pads that we want to connect. To see a more exact way
@@ -159,7 +164,7 @@ the previous translation operations, to make a ring of LEDs:
 			painter.pop_matrix()
   
  .. image:: _static/images/example-led-ring.png
-  :width: 400
+  :width: 600
 
 Not bad for a few lines of code!
 
@@ -202,13 +207,13 @@ To make a complete board, here is the [rest of the owl](https://knowyourmeme.com
 		painter.preview()
 
  .. image:: _static/images/example-rest-of-owl.png
-  :width: 400
+  :width: 600
 
 Note that we've added a battery connector, vias to connect power and ground from each of the LEDs,
 and a circular board edge to make it look a little prettier. It's not a bad idea to check DRC:
 
 .. image:: _static/images/example_led_ring_drc.png
-  :width: 400
+  :width: 600
 
 One you are satisfied with the design, you can either save it for further editing in KiCad
 with the .save() command, or go straight to a gerber with the .export_gerber() command.

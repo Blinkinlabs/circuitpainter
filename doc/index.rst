@@ -24,30 +24,26 @@ Circuit painter works as a front end / wrapper for `KiCad's pcbnew <https://www.
 
 For more backgrond on the project, see `Matt's Hackaday Berlin talk <https://www.youtube.com/watch?v=9XV9PSsmMkk>`_ about Circuit painter.
 
-:doc:`installation`
-   How to install Circuit Painter.
-
-:doc:`getting_started`
-   Getting started tutorial
-
-:doc:`advanced_usage`
-   Tips and tricks for extending the use of Circuit Painter
-
-:doc:`notes`
-   Additional Notes
-
-:doc:`api`
-   Function Reference
-
-.. Hidden TOCs
-
 .. toctree::
-   :maxdepth: 2
    :hidden:
+   :caption: Getting Started
 
    installation
    getting_started
+   examples
+
+.. toctree::
+   :hidden:
+   :caption: Advanced topics
+
    advanced_usage
    notes
    api
-   genindex
+
+.. toctree::
+   :hidden:
+   :caption: External links
+
+   Source Code on Github <https://github.com/blinkinlabs/circuitpainter>
+   PyPi Project <https://pypi.org/project/circuitpainter/>
+   Blinkinlabs <https://blinkinlabs.com>
