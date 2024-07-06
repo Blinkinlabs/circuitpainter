@@ -124,12 +124,16 @@ class CircuitPainter:
     def __init__(
             self,
             filename=None,
-            library_path=None):
+            library_path=None,
+            preserve_origin=False):
         """ Create a Circuit Builder context
 
         :param filename: (optional) If specified, load the given PCB. If not
              specified, start with a blank PCB
         :param library_path: (optional) Path to the footprint libraries
+        :param preserve_origin: By default, Circuit Painter translates the
+             board origin to (40,40), so that the board will be inside of the
+             title block. Set this to false to keep the origin at (0,0).
         """
 
         if library_path==None:
@@ -155,7 +159,7 @@ class CircuitPainter:
         self.draw_width = 0.1
         self.draw_layer = "F_Cu"
         self.draw_fill = False
-        self.show_reference_designators = True
+        self.show_reference_designators = False
 
         # Put all generated items into a group, to make them easier to
         # identify.
@@ -172,6 +176,11 @@ class CircuitPainter:
         # it would prevent modifying the design rules. Instead, we run the DRC
         # once before the _fill_zones command is called.
         self.is_drc_run = False
+
+        # Start drawing at position 50, 50 on the circuit board canvas, so that it
+        # fits in the sheet nicely.
+        if not preserve_origin:
+            self.translate(50,50)
 
     def width(self, width):
         """ Set the width to use for drawing commands

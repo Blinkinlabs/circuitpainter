@@ -25,9 +25,6 @@ def lerp(a,b,percent):
 def lotus_leds(radius, leds,led_radius_percent):
     painter = CircuitPainter()
 
-    # Don't show reference designator names on the board silkscreen
-    painter.no_designators()
-
     anglular_step = math.ceil(360/leds)
 
     # Compute the radial positions that the component arcs start and stop at

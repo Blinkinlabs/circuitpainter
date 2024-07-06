@@ -1,7 +1,6 @@
 from circuitpainter import CircuitPainter
 painter = CircuitPainter()
 
-painter.no_designators() # Don't show reference designator names on the board silkscreen
 painter.layer('F_Cu')
 painter.width(.2)
 

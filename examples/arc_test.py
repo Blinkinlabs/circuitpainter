@@ -5,14 +5,9 @@ def arc_test(cols, rows, spacing):
     # Create a new Circuit Painter
     painter = CircuitPainter()
 
-    # Start drawing at position 50, 50 on the circuit board canvas, so that it
-    # fits in the sheet nicely.
-    painter.translate(50,50)
-
     # Draw a board outline
     painter.layer("Edge_Cuts")
     painter.rect(-spacing,-spacing,(cols)*spacing,(rows)*spacing)
-
 
     painter.layer("F_Cu")
     painter.rect_zone(-spacing,-spacing,(cols)*spacing,(rows)*spacing,"vbat")

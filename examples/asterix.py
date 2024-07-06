@@ -4,7 +4,6 @@ import math
 
 def asterix(arms,leds_per_arm):
     painter = CircuitPainter()
-    painter.no_designators()
 
     # Start drawing at a nicer location
     painter.translate(100,100)
@@ -101,7 +100,7 @@ def asterix(arms,leds_per_arm):
 if __name__ == "__main__":
     parser = ArgumentParser(description="Asterix")
     parser.add_argument('--arms',type=int,default=25, help="Number of arms")
-    parser.add_argument('--leds',type=int,default=12, help="Number of LEDs per arm")
+    parser.add_argument('--leds',type=int,default=8, help="Number of LEDs per arm")
     parser.add_argument('--save',action="store_true",help="Save the design to a KiCad file")
     args = parser.parse_args()
 
