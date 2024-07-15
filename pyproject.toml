@@ -13,4 +13,5 @@ dependencies = ["numpy"]
 readme = "README.md"
 
 [project.urls]
-Home = "https://github.com/blinkinlabs/pcb_painter"
+Homepage = "https://circuitpainter.blinkinlabs.com"
+Repository = "https://github.com/blinkinlabs/circuitpainter"
