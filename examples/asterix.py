@@ -1,8 +1,9 @@
 from circuitpainter import CircuitPainter
 from argparse import ArgumentParser
 import math
+import random
 
-def asterix(arms,leds_per_arm):
+def asterix(arms,min_leds_per_arm,max_leds_per_arm):
     painter = CircuitPainter()
 
     # Start drawing at a nicer location
@@ -11,7 +12,7 @@ def asterix(arms,leds_per_arm):
     arm_led_spacing = 10 # Space between LEDS on arm, in mm
     arm_width = 8 # Width of an arm, in MM
 
-    arm_length = leds_per_arm*arm_led_spacing
+
     center_diameter = arm_width/2/math.tan(math.pi/arms)
 
     # Fill the center with copper
@@ -29,10 +30,30 @@ def asterix(arms,leds_per_arm):
 
     led_num = 1
 
+    # Add connector
+    painter.push_matrix()
+    painter.translate(center_diameter-4,0)
+    painter.footprint(0, 2,
+                        "Connector_JST","JST_PH_B3B-PH-K_1x03_P2.00mm_Vertical",
+                        angle=90,
+                        nets=["5V",f"d{led_num}","gnd"],
+                        reference=f"J1"
+                        )
+    
+    painter.layer("B_SilkS")
+    painter.text(-5,-2,"GND",mirrored=True)
+    painter.text(-5,0,"DIN",mirrored=True)
+    painter.text(-5,2,"5V",mirrored=True)
+    painter.pop_matrix()
+    
     # Step through arms backwards, to make data routing cleaner
     for arm in range(arms-1,-1,-1):
+        leds = random.randrange(min_leds_per_arm,max_leds_per_arm+1)
+
+        arm_length = leds*arm_led_spacing
+
         painter.push_matrix()
-        painter.rotate(arm/arms*360)
+        painter.rotate((arm+1)/arms*360)
         painter.translate(center_diameter,0)
 
         # Draw arm outline
@@ -53,7 +74,7 @@ def asterix(arms,leds_per_arm):
         # Place LEDs on this arm
         painter.width(0.254)
         painter.layer("F_Cu")
-        for led in range(0,leds_per_arm):
+        for led in range(0,leds):
             painter.footprint((led+.5)*arm_led_spacing, 0,
                               "LED_SMD","LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm",
                               angle=180,
@@ -76,9 +97,15 @@ def asterix(arms,leds_per_arm):
             painter.track(src_pad[0],src_pad[1],dest_pad[0],dest_pad[1])
 
         # Bring first data line back to asterix center
-        first_pad = painter.get_object_position(painter.get_pads(f"LED{arm_led_nums[0]}")[3])
-        painter.track(first_pad[0],first_pad[1],first_pad[0],arm_width/2-1)
-        painter.track(first_pad[0],arm_width/2-1,-1,arm_width/2-1)
+        if arm != arms - 1:
+            first_pad = painter.get_object_position(painter.get_pads(f"LED{arm_led_nums[0]}")[3])
+            painter.track(first_pad[0],first_pad[1],first_pad[0],arm_width/2-1)
+            painter.track(first_pad[0],arm_width/2-1,-1,arm_width/2-1)
+        else:
+            first_pad = painter.get_object_position(painter.get_pads(f"LED{arm_led_nums[0]}")[3])
+            din_pad = painter.get_object_position(painter.get_pads(f"J1")[1])
+            painter.track(first_pad[0],first_pad[1],din_pad[0],din_pad[1])
+
 
         # Connect previous data line
         if arm != arms-1:
@@ -100,11 +127,12 @@ def asterix(arms,leds_per_arm):
 if __name__ == "__main__":
     parser = ArgumentParser(description="Asterix")
     parser.add_argument('--arms',type=int,default=25, help="Number of arms")
-    parser.add_argument('--leds',type=int,default=8, help="Number of LEDs per arm")
+    parser.add_argument('--min-leds',type=int,default=8, help="Minimum number of LEDs per arm")
+    parser.add_argument('--max-leds',type=int,default=12, help="Maximum number of LEDs per arm")
     parser.add_argument('--save',action="store_true",help="Save the design to a KiCad file")
     args = parser.parse_args()
 
-    painter = asterix(args.arms,args.leds)
+    painter = asterix(args.arms,args.min_leds,args.max_leds)
     if args.save:
         painter.export_gerber('asterix')
     else:
