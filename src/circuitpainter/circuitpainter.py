@@ -11,7 +11,6 @@ from tempfile import TemporaryDirectory
 import zipfile
 import pcbnew
 from circuitpainter.transform_matrix import TransformMatrix
-import shutil
 
 
 # References:
@@ -31,12 +30,15 @@ def _guess_footprint_library_path():
         kicad_path = Path(shutil.which('kicad'))
         footprint_path = f"{kicad_path.parents[1]}\\share\\kicad\\footprints"
     else:
-        raise OSError('Could not guess KiCad footprint library location, please specify manually')
+        raise OSError(
+            'Could not guess KiCad footprint library location, please specify manually')
 
     if not Path(footprint_path).is_dir():
-        raise OSError(f"Autodetected KiCad footprint library: {footprint_path} does not exist, please specify manually")
+        raise OSError(
+            f"Autodetected KiCad footprint library: {footprint_path} does not exist, please specify manually")
 
     return footprint_path
+
 
 def _make_zip(output_name, filenames):
     """Create a zip file
@@ -47,13 +49,14 @@ def _make_zip(output_name, filenames):
     output_name: Name of the output zip file (will be overwritten if exists)
     filenames: Full paths of files to write to the zip file
     """
-    with zipfile.ZipFile(output_name,'w') as of:
+    with zipfile.ZipFile(output_name, 'w') as of:
         for filename in filenames:
             path = Path(filename)
             of.write(filename,
                      arcname=path.name,
                      compress_type=zipfile.ZIP_DEFLATED,
                      compresslevel=5)
+
 
 class CircuitPainter:
 
@@ -75,8 +78,9 @@ class CircuitPainter:
         "B_Adhes": pcbnew.B_Adhes,      # Bottom glue
         "B_CrtYd": pcbnew.B_CrtYd,      # Bottom component courtyards
         "B_Fab": pcbnew.B_Fab,          # Bottom fabrication notes
-        
-        "Dwgs_User": pcbnew.Dwgs_User,  # User drawings: Use for dimensions, etc.
+
+        # User drawings: Use for dimensions, etc.
+        "Dwgs_User": pcbnew.Dwgs_User,
         "Cmts_User": pcbnew.Cmts_User,
         "Eco1_User": pcbnew.Eco1_User,
         "Eco2_User": pcbnew.Eco2_User,
@@ -144,7 +148,7 @@ class CircuitPainter:
              title block. Set this to false to keep the origin at (0,0).
         """
 
-        if library_path==None:
+        if library_path is None:
             library_path = _guess_footprint_library_path()
 
         self.tempdir = TemporaryDirectory()
@@ -188,7 +192,7 @@ class CircuitPainter:
         # Start drawing at position 50, 50 on the circuit board canvas, so that it
         # fits in the sheet nicely.
         if not preserve_origin:
-            self.translate(50,50)
+            self.translate(50, 50)
 
     def width(self, width):
         """ Set the width to use for drawing commands
@@ -509,9 +513,8 @@ class CircuitPainter:
 
         if nets is not None:
             if len(nets) != len(footprint.Pads()):
-                print(
+                raise ValueError(
                     f'Incorrect number of nets provided, expected:{len(footprint.Pads())} got:{len(nets)}')
-                exit(1)
 
             for net, pad in zip(nets, footprint.Pads()):
                 pad.SetNet(self._find_net(net))
@@ -875,14 +878,14 @@ class CircuitPainter:
                                    "--exclude-drawing-sheet",
                                    "-l",
                                    ','.join([i.replace('_',
-                                                       '.') for i in self.layers.keys()]),
+                                                       '.') for i in self.layers]),
                                    f"{tmpdir_kicad}/{name}.kicad_pcb"],
                                   cwd=tmpdir_kicad)
 
             shutil.copyfile(f"{tmpdir_kicad}/{name}.svg",
                             f"{output_dir}/{name}.svg")
 
-    def export_step(self, name, output_dir = "."):
+    def export_step(self, name, output_dir="."):
         """ Export the design to an STEP file
 
         This saves the file to a temporary loation, uses the kicad command
@@ -936,8 +939,8 @@ class CircuitPainter:
                                    "pcb",
                                    "export",
                                    "pos",
-                                   "--format","csv",
-                                   "--units","mm",
+                                   "--format", "csv",
+                                   "--units", "mm",
                                    "--bottom-negate-x",
                                    "--use-drill-file-origin",
                                    "--output", f"{name}_pos.csv",
