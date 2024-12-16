@@ -1,0 +1,281 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation &mdash; Circuit Painter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Getting Started Tutorial" href="getting_started.html" />
+    <link rel="prev" title="Core concepts" href="concepts.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Circuit Painter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">What is Circuit Painter?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Core concepts</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linux">Linux</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#macos">macOS</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example Projects</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Additional Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Function Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">External links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/blinkinlabs/circuitpainter">Source Code on Github</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/circuitpainter/">PyPi Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://blinkinlabs.com">Blinkinlabs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Circuit Painter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Installation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
+<section id="windows">
+<h2>Windows<a class="headerlink" href="#windows" title="Link to this heading"></a></h2>
+<p>For Windows, first download and install <a class="reference external" href="https://www.kicad.org/download/windows/">KiCad</a>.
+The latest stable release of version 8 is recommended, and the default options are fine.</p>
+<p>During the installation, KiCad will make a Start Menu shortcut for the
+‘KiCad 8.0 Command Prompt’:</p>
+<a class="reference internal image-reference" href="_images/install_windows_kicad_prompt.png"><img alt="_images/install_windows_kicad_prompt.png" src="_images/install_windows_kicad_prompt.png" style="width: 600px;" />
+</a>
+<p>Run this, and you’ll be presented with a command prompt that is fully
+configured to work with KiCad. From here, you can install CircuitPainter
+using Pip:</p>
+<blockquote>
+<div><div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>pip install circuitpainter
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/install_windows_pip.png"><img alt="_images/install_windows_pip.png" src="_images/install_windows_pip.png" style="width: 600px;" />
+</a>
+<p>Next, you can run python:</p>
+<blockquote>
+<div><div class="highlight-bat notranslate"><div class="highlight"><pre><span></span>python
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/install_windows_run_python.png"><img alt="_images/install_windows_run_python.png" src="_images/install_windows_run_python.png" style="width: 600px;" />
+</a>
+<p>and then type this into the Python terminal, to create an empty board and
+show that it’s working:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circuitpainter</span> <span class="kn">import</span> <span class="n">CircuitPainter</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">CircuitPainter</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/install_windows_empty_board.png"><img alt="_images/install_windows_empty_board.png" src="_images/install_windows_empty_board.png" style="width: 600px;" />
+</a>
+<p>If everything was set up correctly, you should PCB Editor window pop up,
+showing the blank board:</p>
+<a class="reference internal image-reference" href="_images/install_windows_preview_success.png"><img alt="_images/install_windows_preview_success.png" src="_images/install_windows_preview_success.png" style="width: 600px;" />
+</a>
+<p>Close the PCB editor, then type exit() into the Python prompt to close it:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">exit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/install_windows_close_python.png"><img alt="_images/install_windows_close_python.png" src="_images/install_windows_close_python.png" style="width: 600px;" />
+</a>
+<p>Now, CircuitPainter is set up in the KiCad Command prompt. You can use this
+Python shell to run CircuitPainter scripts, or interact directly with the
+Python REPL. The installation is permanent, so you don’t need to do the
+install steps the next time you want to run CircuitPainter- just open the
+KiCad Commadn Prompt, and you are good to go.</p>
+<p>Note that if you upgrade KiCad, there is a chance that it will update the
+version of Python that it shipped with. In that case, you will need to do the
+installation process again.</p>
+</section>
+<section id="linux">
+<h2>Linux<a class="headerlink" href="#linux" title="Link to this heading"></a></h2>
+<p>For Linux, first install <a class="reference external" href="https://www.kicad.org/download/linux/">KiCad</a>
+using the instructions for your distro. The latest stable release of version 8
+is recommended. Note: these instructions were tested with Ubuntu 24.04,
+and may need to be adjusted based on the distribution that you’re running. In
+particular, the flatpack install might be difficult to get working with
+Circuitpainter.</p>
+<p>In addition to KiCad, you may also need to install python-venv. For Ubuntu:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>python3-venv
+</pre></div>
+</div>
+</div></blockquote>
+<p>Once KiCad is installed, open a Terminal window, and create a new directory to work in:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>mkdir<span class="w"> </span>circuitpainter<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span><span class="nb">cd</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$_</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/install_linux_mkdir.png"><img alt="_images/install_linux_mkdir.png" src="_images/install_linux_mkdir.png" style="width: 600px;" />
+</a>
+<p>Next, set up a Python <a class="reference external" href="https://docs.python.org/3/tutorial/venv.html">virtual environment</a>,
+and activate it. Note that you need to use the option ‘–system-site-packages’,
+so that Circuit Painter can find the version of KiCad installed by your package
+manager:</p>
+<blockquote>
+<div><p>python3 -m venv –system-site-packages venv
+. venv/bin/activate</p>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/install_linux_venv.png"><img alt="_images/install_linux_venv.png" src="_images/install_linux_venv.png" style="width: 600px;" />
+</a>
+<p>From here, you can install CircuitPainter using Pip:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>circuitpainter
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/install_linux_pip.png"><img alt="_images/install_linux_pip.png" src="_images/install_linux_pip.png" style="width: 600px;" />
+</a>
+<p>Next, you can run python:</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/install_linux_run_python.png"><img alt="_images/install_linux_run_python.png" src="_images/install_linux_run_python.png" style="width: 600px;" />
+</a>
+<p>and then type this into the Python terminal, to create an empty board and
+show that it’s working:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circuitpainter</span> <span class="kn">import</span> <span class="n">CircuitPainter</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">CircuitPainter</span><span class="p">()</span>
+<span class="n">p</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/install_linux_empty_board.png"><img alt="_images/install_linux_empty_board.png" src="_images/install_linux_empty_board.png" style="width: 600px;" />
+</a>
+<p>If everything was set up correctly, you should PCB Editor window pop up,
+showing the blank board:</p>
+<a class="reference internal image-reference" href="_images/install_linux_preview_success.png"><img alt="_images/install_linux_preview_success.png" src="_images/install_linux_preview_success.png" style="width: 600px;" />
+</a>
+<p>Close the PCB editor, then type exit() into the Python prompt to close it:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">exit</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/install_linux_close_python.png"><img alt="_images/install_linux_close_python.png" src="_images/install_linux_close_python.png" style="width: 600px;" />
+</a>
+<p>Now, you have a working CircuitPainter installation. To start it again next
+time, just open a new terminal window, change to the ‘circuitpainter’
+directory that you created, and type in ‘. venv/bin/activate’ to enable the
+virtual environment.</p>
+<p>Note that if you upgrade KiCad, there is a chance that it will update the
+version of Python that it shipped with. In that case, you will need to do the
+installation process again.</p>
+</section>
+<section id="macos">
+<h2>macOS<a class="headerlink" href="#macos" title="Link to this heading"></a></h2>
+<p>Unfortunately, the situation on macOS seems to be more complex- the way that
+KiCad is bundled appears to make it difficult to install packages into the
+Python environment that ships with KiCad. If you have experience with this,
+please let us know how to set it up.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="concepts.html" class="btn btn-neutral float-left" title="Core concepts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="getting_started.html" class="btn btn-neutral float-right" title="Getting Started Tutorial" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024 Blinkinlabs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

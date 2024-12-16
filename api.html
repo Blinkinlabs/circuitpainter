@@ -1,0 +1,678 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Function Reference &mdash; Circuit Painter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Additional Notes" href="notes.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Circuit Painter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">What is Circuit Painter?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Core concepts</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example Projects</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Additional Notes</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Function Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#circuitpainter.CircuitPainter"><code class="docutils literal notranslate"><span class="pre">CircuitPainter</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.layers"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.layers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.__init__"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.__init__()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.width"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.width()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.layer"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.layer()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.fill"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.fill()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.no_fill"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.no_fill()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.designators"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.designators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.no_designators"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.no_designators()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.push_matrix"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.push_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.pop_matrix"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.pop_matrix()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.translate"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.translate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.rotate"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.rotate()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.get_object_position"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.get_object_position()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.track"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.track()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.arc_track"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.arc_track()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.via"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.via()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.poly_zone"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.poly_zone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.rect_zone"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.rect_zone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.circle_zone"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.circle_zone()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.footprint"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.footprint()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.get_pads"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.get_pads()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.line"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.line()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.arc"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.arc()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.circle"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.circle()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.poly"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.poly()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.rect"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.rect()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.text"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.text()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.dimension"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.dimension()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.save"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.save()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.preview"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.preview()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.export_gerber"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.export_gerber()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.export_svg"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.export_svg()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.export_step"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.export_step()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#circuitpainter.CircuitPainter.export_pos"><code class="docutils literal notranslate"><span class="pre">CircuitPainter.export_pos()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">External links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/blinkinlabs/circuitpainter">Source Code on Github</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/circuitpainter/">PyPi Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://blinkinlabs.com">Blinkinlabs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Circuit Painter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Function Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="function-reference">
+<h1>Function Reference<a class="headerlink" href="#function-reference" title="Link to this heading"></a></h1>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+</tbody>
+</table>
+<p id="module-circuitpainter">Sketching interface for macking function printed circuit boards</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">circuitpainter.</span></span><span class="sig-name descname"><span class="pre">CircuitPainter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter" title="Link to this definition"></a></dt>
+<dd><dl class="py attribute">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.layers">
+<span class="sig-name descname"><span class="pre">layers</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'B_Adhes':</span> <span class="pre">pcbnew.B_Adhes,</span> <span class="pre">'B_CrtYd':</span> <span class="pre">pcbnew.B_CrtYd,</span> <span class="pre">'B_Cu':</span> <span class="pre">pcbnew.B_Cu,</span> <span class="pre">'B_Fab':</span> <span class="pre">pcbnew.B_Fab,</span> <span class="pre">'B_Mask':</span> <span class="pre">pcbnew.B_Mask,</span> <span class="pre">'B_Paste':</span> <span class="pre">pcbnew.B_Paste,</span> <span class="pre">'B_SilkS':</span> <span class="pre">pcbnew.B_SilkS,</span> <span class="pre">'Cmts_User':</span> <span class="pre">pcbnew.Cmts_User,</span> <span class="pre">'Dwgs_User':</span> <span class="pre">pcbnew.Dwgs_User,</span> <span class="pre">'Eco1_User':</span> <span class="pre">pcbnew.Eco1_User,</span> <span class="pre">'Eco2_User':</span> <span class="pre">pcbnew.Eco2_User,</span> <span class="pre">'Edge_Cuts':</span> <span class="pre">pcbnew.Edge_Cuts,</span> <span class="pre">'F_Adhes':</span> <span class="pre">pcbnew.F_Adhes,</span> <span class="pre">'F_CrtYd':</span> <span class="pre">pcbnew.F_CrtYd,</span> <span class="pre">'F_Cu':</span> <span class="pre">pcbnew.F_Cu,</span> <span class="pre">'F_Fab':</span> <span class="pre">pcbnew.F_Fab,</span> <span class="pre">'F_Mask':</span> <span class="pre">pcbnew.F_Mask,</span> <span class="pre">'F_Paste':</span> <span class="pre">pcbnew.F_Paste,</span> <span class="pre">'F_SilkS':</span> <span class="pre">pcbnew.F_SilkS,</span> <span class="pre">'In10_Cu':</span> <span class="pre">pcbnew.In10_Cu,</span> <span class="pre">'In11_Cu':</span> <span class="pre">pcbnew.In11_Cu,</span> <span class="pre">'In12_Cu':</span> <span class="pre">pcbnew.In12_Cu,</span> <span class="pre">'In13_Cu':</span> <span class="pre">pcbnew.In13_Cu,</span> <span class="pre">'In14_Cu':</span> <span class="pre">pcbnew.In14_Cu,</span> <span class="pre">'In15_Cu':</span> <span class="pre">pcbnew.In15_Cu,</span> <span class="pre">'In16_Cu':</span> <span class="pre">pcbnew.In16_Cu,</span> <span class="pre">'In17_Cu':</span> <span class="pre">pcbnew.In17_Cu,</span> <span class="pre">'In18_Cu':</span> <span class="pre">pcbnew.In18_Cu,</span> <span class="pre">'In19_Cu':</span> <span class="pre">pcbnew.In19_Cu,</span> <span class="pre">'In1_Cu':</span> <span class="pre">pcbnew.In1_Cu,</span> <span class="pre">'In20_Cu':</span> <span class="pre">pcbnew.In20_Cu,</span> <span class="pre">'In21_Cu':</span> <span class="pre">pcbnew.In21_Cu,</span> <span class="pre">'In22_Cu':</span> <span class="pre">pcbnew.In22_Cu,</span> <span class="pre">'In23_Cu':</span> <span class="pre">pcbnew.In23_Cu,</span> <span class="pre">'In24_Cu':</span> <span class="pre">pcbnew.In24_Cu,</span> <span class="pre">'In25_Cu':</span> <span class="pre">pcbnew.In25_Cu,</span> <span class="pre">'In26_Cu':</span> <span class="pre">pcbnew.In26_Cu,</span> <span class="pre">'In27_Cu':</span> <span class="pre">pcbnew.In27_Cu,</span> <span class="pre">'In28_Cu':</span> <span class="pre">pcbnew.In28_Cu,</span> <span class="pre">'In29_Cu':</span> <span class="pre">pcbnew.In29_Cu,</span> <span class="pre">'In2_Cu':</span> <span class="pre">pcbnew.In2_Cu,</span> <span class="pre">'In30_Cu':</span> <span class="pre">pcbnew.In30_Cu,</span> <span class="pre">'In3_Cu':</span> <span class="pre">pcbnew.In3_Cu,</span> <span class="pre">'In4_Cu':</span> <span class="pre">pcbnew.In4_Cu,</span> <span class="pre">'In5_Cu':</span> <span class="pre">pcbnew.In5_Cu,</span> <span class="pre">'In6_Cu':</span> <span class="pre">pcbnew.In6_Cu,</span> <span class="pre">'In7_Cu':</span> <span class="pre">pcbnew.In7_Cu,</span> <span class="pre">'In8_Cu':</span> <span class="pre">pcbnew.In8_Cu,</span> <span class="pre">'In9_Cu':</span> <span class="pre">pcbnew.In9_Cu,</span> <span class="pre">'Margin':</span> <span class="pre">pcbnew.Margin,</span> <span class="pre">'Rescue':</span> <span class="pre">pcbnew.Rescue,</span> <span class="pre">'User_1':</span> <span class="pre">pcbnew.User_1,</span> <span class="pre">'User_2':</span> <span class="pre">pcbnew.User_2,</span> <span class="pre">'User_3':</span> <span class="pre">pcbnew.User_3,</span> <span class="pre">'User_4':</span> <span class="pre">pcbnew.User_4,</span> <span class="pre">'User_5':</span> <span class="pre">pcbnew.User_5,</span> <span class="pre">'User_6':</span> <span class="pre">pcbnew.User_6,</span> <span class="pre">'User_7':</span> <span class="pre">pcbnew.User_7,</span> <span class="pre">'User_8':</span> <span class="pre">pcbnew.User_8,</span> <span class="pre">'User_9':</span> <span class="pre">pcbnew.User_9}</span></em><a class="headerlink" href="#circuitpainter.CircuitPainter.layers" title="Link to this definition"></a></dt>
+<dd><p>Board layers, from pcbnew</p>
+<p>see: <a class="reference external" href="https://gitlab.com/kicad/code/kicad/-/blob/master/include/layer_ids.h">https://gitlab.com/kicad/code/kicad/-/blob/master/include/layer_ids.h</a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">preserve_origin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.__init__" title="Link to this definition"></a></dt>
+<dd><p>Create a Circuit Builder context</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> – (optional) If specified, load the given PCB. If not
+specified, start with a blank PCB</p></li>
+<li><p><strong>library_path</strong> – (optional) Path to the footprint libraries</p></li>
+<li><p><strong>preserve_origin</strong> – By default, Circuit Painter translates the
+board origin to (40,40), so that the board will be inside of the
+title block. Set this to false to keep the origin at (0,0).</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.width">
+<span class="sig-name descname"><span class="pre">width</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">width</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.width" title="Link to this definition"></a></dt>
+<dd><p>Set the width to use for drawing commands</p>
+<p>Sets the width for objects like lines, tracks, arcs, etc.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>width</strong> – Width (mm)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.layer">
+<span class="sig-name descname"><span class="pre">layer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">layer</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.layer" title="Link to this definition"></a></dt>
+<dd><p>Set the PCB drawing layer</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>layer</strong> – Layer to use, for example “F_Cu”</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.fill">
+<span class="sig-name descname"><span class="pre">fill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.fill" title="Link to this definition"></a></dt>
+<dd><p>Enable fills for drawing commands</p>
+<p>Drawing objects such as circles, rectangles, and polygons will have
+their fill property set to true.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.no_fill">
+<span class="sig-name descname"><span class="pre">no_fill</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.no_fill" title="Link to this definition"></a></dt>
+<dd><p>Disable fills for drawing commands</p>
+<p>Drawing objects such as circles, rectangles, and polygons will have
+their fill property set to false.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.designators">
+<span class="sig-name descname"><span class="pre">designators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.designators" title="Link to this definition"></a></dt>
+<dd><p>Enable silkscreen reference designtors for placed footprints</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.no_designators">
+<span class="sig-name descname"><span class="pre">no_designators</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.no_designators" title="Link to this definition"></a></dt>
+<dd><p>Disable silkscreen reference designtors for placed footprints</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.push_matrix">
+<span class="sig-name descname"><span class="pre">push_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.push_matrix" title="Link to this definition"></a></dt>
+<dd><p>Save the state of the current transformation matrix</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.pop_matrix">
+<span class="sig-name descname"><span class="pre">pop_matrix</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.pop_matrix" title="Link to this definition"></a></dt>
+<dd><p>Restore the state of the last transformation matrix</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.translate">
+<span class="sig-name descname"><span class="pre">translate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.translate" title="Link to this definition"></a></dt>
+<dd><p>Translate all following graphics commands by the given amounts</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – x translation (mm)</p></li>
+<li><p><strong>y</strong> – y translation (mm)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.rotate" title="Link to this definition"></a></dt>
+<dd><p>Rotate all following graphics commands by the given angle</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>angle</strong> – rotation angle (degrees)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.get_object_position">
+<span class="sig-name descname"><span class="pre">get_object_position</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">o</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.get_object_position" title="Link to this definition"></a></dt>
+<dd><p>Get a local coordinate for a PCB object</p>
+<p>Can be a pad, footprint, etc</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>o</strong> – Object to find coordinate for</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.track">
+<span class="sig-name descname"><span class="pre">track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.track" title="Link to this definition"></a></dt>
+<dd><p>Place a PCB track</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x1</strong> – starting point (mm)</p></li>
+<li><p><strong>y1</strong> – starting point (mm)</p></li>
+<li><p><strong>x2</strong> – ending point (mm)</p></li>
+<li><p><strong>y2</strong> – ending point (mm)</p></li>
+<li><p><strong>net</strong> – (optional) Net to connect track to</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.arc_track">
+<span class="sig-name descname"><span class="pre">arc_track</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.arc_track" title="Link to this definition"></a></dt>
+<dd><p>Draw an arc-shaped PCB track</p>
+<p>Note that arc-shaped tracks are a little weirder than normal arcs. The
+DRC engine expects them to be connected at both ends (like a normal
+track), and the PCB Editor considers it a DRC violation to place
+certain objects (like vias) on them.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – center of arc (mm)</p></li>
+<li><p><strong>y</strong> – center of arc (mm)</p></li>
+<li><p><strong>radius</strong> – arc radius (mm)</p></li>
+<li><p><strong>start</strong> – starting angle of arc (degrees)</p></li>
+<li><p><strong>end</strong> – ending angle of arc (degrees)</p></li>
+<li><p><strong>net</strong> – (optional) Net to connect track to</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.via">
+<span class="sig-name descname"><span class="pre">via</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">d</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">w</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.6</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.via" title="Link to this definition"></a></dt>
+<dd><p>Place a via</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – via coordinate (mm)</p></li>
+<li><p><strong>y</strong> – via coordinate (mm)</p></li>
+<li><p><strong>net</strong> – (optional) name of net to connect via to</p></li>
+<li><p><strong>d</strong> – (optional) drill diameter (mm)</p></li>
+<li><p><strong>w</strong> – (optional) annular ring diameter (mm)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.poly_zone">
+<span class="sig-name descname"><span class="pre">poly_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.poly_zone" title="Link to this definition"></a></dt>
+<dd><p>Place a polygonal zone</p>
+<p>Zones can be placed on both copper and non-copper layers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> – List of x,y coordinates that make up the polygon (mm)</p></li>
+<li><p><strong>net</strong> – (optional) name of net to connect zone to.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.rect_zone">
+<span class="sig-name descname"><span class="pre">rect_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.rect_zone" title="Link to this definition"></a></dt>
+<dd><p>Place a rectangular zone</p>
+<p>Zones can be placed on both copper and non-copper layers</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x1</strong> – first corner of rectangle (mm)</p></li>
+<li><p><strong>y1</strong> – first corner of rectangle (mm)</p></li>
+<li><p><strong>x2</strong> – second corner of rectangle (mm)</p></li>
+<li><p><strong>y2</strong> – second corner of rectangle (mm)</p></li>
+<li><p><strong>net</strong> – (optional) name ofnet to connect rectangle to</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.circle_zone">
+<span class="sig-name descname"><span class="pre">circle_zone</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">net</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.circle_zone" title="Link to this definition"></a></dt>
+<dd><p>Place a circular zone</p>
+<p>Zones can be placed on both copper and non-copper layers</p>
+<p>Note that the zone is made of a line segments that approximate the
+circle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – center of circle (mm)</p></li>
+<li><p><strong>y</strong> – center of circle (mm)</p></li>
+<li><p><strong>radius</strong> – radius of circle (mm)</p></li>
+<li><p><strong>net</strong> – (optional) name of net to connect rectangle to</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.footprint">
+<span class="sig-name descname"><span class="pre">footprint</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'P?'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nets</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">library_path</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.footprint" title="Link to this definition"></a></dt>
+<dd><p>Place a footprint</p>
+<p>Places a footprint from the given library onto the board</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – x coordinate (mm)</p></li>
+<li><p><strong>y</strong> – y coordinate (mm)</p></li>
+<li><p><strong>library</strong> – Library name, relative to the system library path. To change
+the system library path, edit the ‘library_path’ variable.
+For example: ‘LED_SMD’</p></li>
+<li><p><strong>name</strong> – Part name, for example: LED_1210_3225Metric</p></li>
+<li><p><strong>reference</strong> – (optional) Reference designator to assign to part. There
+are three options:
+1. If you don’t care about the designator, leave this as
+the default, and the footprints will be assigned sequential
+reference designators P1, P2, …
+2. If you want more conventional naming, specify a leading
+portion of the designator followed by a question mark
+(for example: LED?), and the footprints will be assigned
+sequential reference designators based on their type.
+3. If you want to assign sequence numbers yourself,
+specify a designator string that does not end in a question
+mark (for example: LED3). In this case, the supplied
+designator will be used without modification.</p></li>
+<li><p><strong>angle</strong> – (optional) Angle to rotate the part before placement (degrees)</p></li>
+<li><p><strong>nets</strong> – (optional) List of nets to assign to the footprint pads, in
+order that they are referenced in the part. Caution: Be sure to
+double check that the right nets are assigned! This script knows
+nothing about how the parts are meant to be used and will
+happily make connections that will damage your part.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.get_pads">
+<span class="sig-name descname"><span class="pre">get_pads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.get_pads" title="Link to this definition"></a></dt>
+<dd><p>Get a list of the pads in the specified footprint</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference</strong> – Reference designator to retrieve pads from. For example:
+LED1</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.line">
+<span class="sig-name descname"><span class="pre">line</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.line" title="Link to this definition"></a></dt>
+<dd><p>Draw a line from x1,y1 to x2,y2</p>
+<p>A line is a graphical object, and can be used to make a board outline
+soldermask, for example, but not to make a conductive track.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x1</strong> – starting point (mm)</p></li>
+<li><p><strong>y1</strong> – starting point (mm)</p></li>
+<li><p><strong>x2</strong> – starting point (mm)</p></li>
+<li><p><strong>y2</strong> – eneding point (mm)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.arc">
+<span class="sig-name descname"><span class="pre">arc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.arc" title="Link to this definition"></a></dt>
+<dd><p>Draw an arc</p>
+<p>An arc is a graphical object, and can be used to make a board outline
+soldermask, for example, but not to make a conductive track.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – center of arc (mm)</p></li>
+<li><p><strong>y</strong> – center of arc (mm)</p></li>
+<li><p><strong>radius</strong> – arc radius (mm)</p></li>
+<li><p><strong>start</strong> – starting angle of arc (degrees)</p></li>
+<li><p><strong>end</strong> – ending angle of arc (degrees)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.circle">
+<span class="sig-name descname"><span class="pre">circle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.circle" title="Link to this definition"></a></dt>
+<dd><p>Draw a circle</p>
+<p>A circle is a graphical object, and can be used to make a cutout in a
+soldermask, for example, but not to make a conductive track.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – center of circle (mm)</p></li>
+<li><p><strong>y</strong> – center of circle (mm)</p></li>
+<li><p><strong>radius</strong> – radius of circle (mm)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.poly">
+<span class="sig-name descname"><span class="pre">poly</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.poly" title="Link to this definition"></a></dt>
+<dd><p>Draw a polygon</p>
+<p>A polygon is a graphical object, and can be used to make a cutout in
+a soldermask, for example, but not to make a conductive track.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>points</strong> – List of points to add to the polygon (mm)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.rect">
+<span class="sig-name descname"><span class="pre">rect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.rect" title="Link to this definition"></a></dt>
+<dd><p>Draw a rectangle</p>
+<p>A rectangle is a graphical object, and can be used to make a cutout in
+a soldermask, for example, but not to make a conductive track.</p>
+<p>Note: Rectangles are created as polygon objects, so that they can
+support rotation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x1</strong> – first corner of rectangle (mm)</p></li>
+<li><p><strong>y1</strong> – first corner of rectangle (mm)</p></li>
+<li><p><strong>x2</strong> – second corner of rectangle (mm)</p></li>
+<li><p><strong>y2</strong> – second corner of rectangle (mm)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.text">
+<span class="sig-name descname"><span class="pre">text</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">message</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mirrored</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">italic</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">knockout</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.text" title="Link to this definition"></a></dt>
+<dd><p>Draw text</p>
+<p>Text is is a graphical object, and can be used to make a cutout in
+a soldermask, for example, but not to make a conductive track.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x</strong> – x coordinate to place text (mm)</p></li>
+<li><p><strong>y</strong> – y coordinate to place text (mm)</p></li>
+<li><p><strong>message</strong> – Text string to display (single line only)</p></li>
+<li><p><strong>angle</strong> – angle to rotate text (degrees)</p></li>
+<li><p><strong>mirrored</strong> – If true, draw text backwards</p></li>
+<li><p><strong>bold</strong> – If true, use a bold font</p></li>
+<li><p><strong>italic</strong> – If true, use an italic font</p></li>
+<li><p><strong>knockout</strong> – If true, draw the text as a filled rect with the text cut from the rectangle</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.dimension">
+<span class="sig-name descname"><span class="pre">dimension</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">x1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.dimension" title="Link to this definition"></a></dt>
+<dd><p>Draw a linear dimension line</p>
+<p>Dimension lines can be used to document importanat sizes or spacings
+between objects. They aren’t needed by a computer to process the
+board files, but are helpful for humans who are inspecting board
+files. Common things that you might want to add dimensions for are
+the bounding box of the PCB edges (to show how big the PCB is), or
+distances between a reference point and mounting holes or test points.</p>
+<p>Dimension lines are usually placed on the ‘Dwgs_User’ layer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>x1</strong> – starting point (mm)</p></li>
+<li><p><strong>y1</strong> – starting point (mm)</p></li>
+<li><p><strong>x2</strong> – ending point (mm)</p></li>
+<li><p><strong>y2</strong> – ending point (mm)</p></li>
+<li><p><strong>height</strong> – Spacing between measured points and dimension line</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.save" title="Link to this definition"></a></dt>
+<dd><p>Save the board design to a KiCad board file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> – File name to write to</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.preview">
+<span class="sig-name descname"><span class="pre">preview</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.preview" title="Link to this definition"></a></dt>
+<dd><p>Preview the output file in KiCad</p>
+<p>This saves the file to a temporary loation, then opens it using pcbnew.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.export_gerber">
+<span class="sig-name descname"><span class="pre">export_gerber</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">[]</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.export_gerber" title="Link to this definition"></a></dt>
+<dd><p>Export the design to gerbers / drill file</p>
+<p>This saves the file to a temporary loation, uses the kicad command
+line interface to render gerber outputs, and finally places the
+gerbers in a zip file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of zip file to write to</p></li>
+<li><p><strong>directory</strong> – (optional) Directory to place the file in</p></li>
+<li><p><strong>layers</strong> – (optional) List of layers to export.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.export_svg">
+<span class="sig-name descname"><span class="pre">export_svg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.export_svg" title="Link to this definition"></a></dt>
+<dd><p>Export the design to an SVG</p>
+<p>This saves the file to a temporary loation, uses the kicad command
+line interface to render an svg, then copies it to the specified
+location</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of output file</p></li>
+<li><p><strong>directory</strong> – (optional) Directory to place the file in</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.export_step">
+<span class="sig-name descname"><span class="pre">export_step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.export_step" title="Link to this definition"></a></dt>
+<dd><p>Export the design to an STEP file</p>
+<p>This saves the file to a temporary loation, uses the kicad command
+line interface to render a step file, then copies it to the specified
+location</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of output file</p></li>
+<li><p><strong>directory</strong> – (optional) Directory to place the file in</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="circuitpainter.CircuitPainter.export_pos">
+<span class="sig-name descname"><span class="pre">export_pos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_dir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#circuitpainter.CircuitPainter.export_pos" title="Link to this definition"></a></dt>
+<dd><p>Export a pick-and-place file</p>
+<p>This saves the file to a temporary loation, uses the kicad command
+line interface to render a pnp file, then copies it to the specified
+location</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> – Name of output file</p></li>
+<li><p><strong>directory</strong> – (optional) Directory to place the file in</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="notes.html" class="btn btn-neutral float-left" title="Additional Notes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024 Blinkinlabs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

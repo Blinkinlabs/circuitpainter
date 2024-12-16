@@ -1,0 +1,349 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Getting Started Tutorial &mdash; Circuit Painter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Example Projects" href="examples.html" />
+    <link rel="prev" title="Installation" href="installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Circuit Painter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">What is Circuit Painter?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="concepts.html">Core concepts</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example Projects</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Additional Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Function Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">External links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/blinkinlabs/circuitpainter">Source Code on Github</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/circuitpainter/">PyPi Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://blinkinlabs.com">Blinkinlabs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Circuit Painter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Getting Started Tutorial</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/getting_started.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="getting-started-tutorial">
+<h1>Getting Started Tutorial<a class="headerlink" href="#getting-started-tutorial" title="Link to this heading"></a></h1>
+<p>This tutorial will walk you through some of the basic concepts in Circuit
+Painter. If you haven’t set up your environment yet, follow the instructions
+in the <a class="reference internal" href="installation.html"><span class="doc">Installation</span></a> section, then type the following commands into a
+circuitpainter-enabled Python interpreter.</p>
+<p>Start by creating a drawing context:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circuitpainter</span> <span class="kn">import</span> <span class="n">CircuitPainter</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">CircuitPainter</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Using the painter object, you can draw non-conductive and conductve shapes,
+footprints, and text onto the PCB.</p>
+<p>First, set the layer to place the object on (tip: use
+print(p.layers.keys()) to show all available layers):</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="s1">&#39;F_SilkS&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Next, draw some non-conductive objects:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Draw a circle with radius 3 at the board origin</span>
+<span class="n">p</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># Draw a line from the board origin to (10,10)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span> <span class="c1"># Draw a circle with raidus 3 at position (10,10)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>So far, there hasn’t been any visual indication of what you’re making.
+To get a preview of what your design looks like, use the preview()
+function:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>This will save the design to a temporary location, then open it in the
+KiCad editor:</p>
+<blockquote>
+<div><a class="reference internal image-reference" href="_images/example-two-lines.png"><img alt="_images/example-two-lines.png" src="_images/example-two-lines.png" style="width: 600px;" />
+</a>
+</div></blockquote>
+<p>It’s good for seeing the project, but be careful! The file
+will be deleted (along with any changes you make), as soon as you close
+the window. If you do want to save your board at this time, use the ‘Save As’
+feature before exiting the editor!</p>
+<p>To change the width of lines, use the width() command:</p>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">width</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># line with width 0.5mm</span>
+<span class="n">p</span><span class="o">.</span><span class="n">width</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># line with width 1mm</span>
+<span class="n">p</span><span class="o">.</span><span class="n">width</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">line</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span> <span class="c1"># line with width 2mm</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/example-line-widths.png"><img alt="_images/example-line-widths.png" src="_images/example-line-widths.png" style="width: 600px;" />
+</a>
+</div></blockquote>
+<p>You can change where and at what angle features are added, by using the
+translate() and rotate() features:</p>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="mi">30</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># Rectangle is drawn at a 30 degreen angle, centered at (10,10).</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/example-rotate-rect.png"><img alt="_images/example-rotate-rect.png" src="_images/example-rotate-rect.png" style="width: 600px;" />
+</a>
+</div></blockquote>
+<p>Calling them multiple times will stack the transformations (they are
+calculated as a 2d transformation matrix)</p>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># Rectangle is drawn centered at (10,10).</span>
+<span class="n">p</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># Rectangle is drawn centered at (20,20).</span>
+<span class="n">p</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># Rectangle is drawn centered at (30,30).</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/example-translate-rect.png"><img alt="_images/example-translate-rect.png" src="_images/example-translate-rect.png" style="width: 600px;" />
+</a>
+</div></blockquote>
+<p>Saving and restoring the applied tranformation is done using push_matrix()
+and pop_matrix(). (Note: This is implemented as a stack, and multiple pushes can be nested):</p>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">angle</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span><span class="mi">30</span><span class="p">):</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">push_matrix</span><span class="p">()</span> <span class="c1"># Save the current transformation settings</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">10</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">rect</span><span class="p">(</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">pop_matrix</span><span class="p">()</span> <span class="c1"># Restore previous transformation settings</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/example-push-pop-rect.png"><img alt="_images/example-push-pop-rect.png" src="_images/example-push-pop-rect.png" style="width: 600px;" />
+</a>
+</div></blockquote>
+<p>Besides lines and rectangles, there are other basic shapes such as arc(), cirle(), and polygon().</p>
+<p>Drawing shapes is ok but the real fun comes from adding components. To add a component,
+first use the library editor in KiCad to find the library and footprint name for
+the part you want to place. Then, you can add them to your board using the footprint()
+command:</p>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="s1">&#39;F_Cu&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">footprint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;LED_SMD&quot;</span><span class="p">,</span><span class="s2">&quot;LED_0805_2012Metric&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/example-add-led.png"><img alt="_images/example-add-led.png" src="_images/example-add-led.png" style="width: 600px;" />
+</a>
+</div></blockquote>
+<p>This placed the part, but it won’t work well as a part- it’s not wired up, so it
+won’t actually function! Let’s add some nets, and a resistor because that
+is nicer to the LED. Note that CircuitPainter doesn’t know or care about what net
+names you assign to what footprints, so be sure to double or triple check that
+your circuit is correct:</p>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">p</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="s1">&#39;F_Cu&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">footprint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;Resistor_SMD&quot;</span><span class="p">,</span><span class="s2">&quot;R_0805_2012Metric&quot;</span><span class="p">,</span><span class="n">nets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;gnd&#39;</span><span class="p">,</span><span class="s1">&#39;led_n&#39;</span><span class="p">])</span>
+<span class="n">p</span><span class="o">.</span><span class="n">footprint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;LED_SMD&quot;</span><span class="p">,</span><span class="s2">&quot;LED_0805_2012Metric&quot;</span><span class="p">,</span><span class="n">nets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;led_n&#39;</span><span class="p">,</span><span class="s1">&#39;vcc&#39;</span><span class="p">])</span>
+<span class="n">p</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/example-connect-led.png"><img alt="_images/example-connect-led.png" src="_images/example-connect-led.png" style="width: 600px;" />
+</a>
+</div></blockquote>
+<p>Note: In this example, we are manually drawing a track that just happens to line up
+with the centers of the two pads that we want to connect. To see a more exact way
+to accomplish this by looking up the positions of each pad, see the asterix example
+project.
+q
+Also note that we didn’t specify a net name to assign to the track. pcbnew is able
+to figure this out because the starting postiion of the track overlapped with the
+second resistor pad, so it assigned the same net to track.</p>
+<p>One LED and resistor is cool, but not that impressive (and honestly more work than
+just doing it by hand). However, we can put this into a loop and combine it with
+the previous translation operations, to make a ring of LEDs:</p>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">angle</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span><span class="mi">30</span><span class="p">):</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">push_matrix</span><span class="p">()</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span> <span class="c1"># Rotation and translation for the next resistor/led combination</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="s1">&#39;F_Cu&#39;</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">footprint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;Resistor_SMD&quot;</span><span class="p">,</span><span class="s2">&quot;R_0805_2012Metric&quot;</span><span class="p">,</span><span class="n">nets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;gnd&#39;</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;led_</span><span class="si">{</span><span class="n">angle</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">footprint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;LED_SMD&quot;</span><span class="p">,</span><span class="s2">&quot;LED_0805_2012Metric&quot;</span><span class="p">,</span><span class="n">nets</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;led_</span><span class="si">{</span><span class="n">angle</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;vcc&#39;</span><span class="p">])</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">p</span><span class="o">.</span><span class="n">pop_matrix</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/example-led-ring.png"><img alt="_images/example-led-ring.png" src="_images/example-led-ring.png" style="width: 600px;" />
+</a>
+</div></blockquote>
+<p>Not bad for a few lines of code!</p>
+<p>To make a complete board, here is the [rest of the owl](<a class="reference external" href="https://knowyourmeme.com/memes/how-to-draw-an-owl">https://knowyourmeme.com/memes/how-to-draw-an-owl</a>):</p>
+<blockquote>
+<div><blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">circuitpainter</span> <span class="kn">import</span> <span class="n">CircuitPainter</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">CircuitPainter</span><span class="p">()</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">no_designators</span><span class="p">()</span> <span class="c1"># Don&#39;t show reference designator names on the board silkscreen</span>
+<span class="n">p</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="s1">&#39;F_Cu&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">width</span><span class="p">(</span><span class="mf">.2</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">angle</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">360</span><span class="p">,</span><span class="mi">36</span><span class="p">):</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">push_matrix</span><span class="p">()</span> <span class="c1"># Save the current transformation settings</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">rotate</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">translate</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">footprint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;Resistor_SMD&quot;</span><span class="p">,</span><span class="s2">&quot;R_0805_2012Metric&quot;</span><span class="p">,</span><span class="n">nets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;gnd&#39;</span><span class="p">,</span><span class="sa">f</span><span class="s1">&#39;led_</span><span class="si">{</span><span class="n">angle</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">])</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">footprint</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;LED_SMD&quot;</span><span class="p">,</span><span class="s2">&quot;LED_0805_2012Metric&quot;</span><span class="p">,</span><span class="n">nets</span><span class="o">=</span><span class="p">[</span><span class="sa">f</span><span class="s1">&#39;led_</span><span class="si">{</span><span class="n">angle</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span><span class="s1">&#39;vcc&#39;</span><span class="p">])</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># Connect the resistor to the LED</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># Connect the resistor to ground</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">track</span><span class="p">(</span><span class="mi">6</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span> <span class="c1"># Connect the LED to vcc</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">via</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">p</span><span class="o">.</span><span class="n">pop_matrix</span><span class="p">()</span>
+
+<span class="c1"># Fill the back of the board with a copper zone, and assign it to the &#39;vcc&#39; net</span>
+<span class="n">p</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="s1">&#39;B_Cu&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">circle_zone</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">14</span><span class="p">,</span><span class="n">net</span><span class="o">=</span><span class="s1">&#39;vcc&#39;</span><span class="p">)</span>
+
+<span class="c1"># Add a battery connector to the back</span>
+<span class="n">p</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="s1">&#39;B_Cu&#39;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">footprint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="s2">&quot;Battery&quot;</span><span class="p">,</span><span class="s2">&quot;BatteryHolder_Keystone_3000_1x12mm&quot;</span><span class="p">,</span><span class="n">nets</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;vcc&#39;</span><span class="p">,</span><span class="s1">&#39;vcc&#39;</span><span class="p">,</span><span class="s1">&#39;gnd&#39;</span><span class="p">])</span>
+
+<span class="c1"># Make the board shape to a circle</span>
+<span class="n">p</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="s2">&quot;Edge_Cuts&quot;</span><span class="p">)</span>
+<span class="n">p</span><span class="o">.</span><span class="n">circle</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">14</span><span class="p">)</span>
+
+<span class="n">p</span><span class="o">.</span><span class="n">preview</span><span class="p">()</span>
+</pre></div>
+</div>
+</div></blockquote>
+<a class="reference internal image-reference" href="_images/example-rest-of-owl.png"><img alt="_images/example-rest-of-owl.png" src="_images/example-rest-of-owl.png" style="width: 600px;" />
+</a>
+</div></blockquote>
+<p>Note that we’ve added a battery connector, vias to connect power and ground from each of the LEDs,
+and a circular board edge to make it look a little prettier. It’s not a bad idea to check DRC:</p>
+<a class="reference internal image-reference" href="_images/example_led_ring_drc.png"><img alt="_images/example_led_ring_drc.png" src="_images/example_led_ring_drc.png" style="width: 600px;" />
+</a>
+<p>One you are satisfied with the design, you can either save it for further editing in KiCad
+with the .save() command, or go straight to a gerber with the .export_gerber() command.</p>
+<p>For more complete examples, see the scripts in the examples directory.</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples.html" class="btn btn-neutral float-right" title="Example Projects" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024 Blinkinlabs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

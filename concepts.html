@@ -1,0 +1,202 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Core concepts &mdash; Circuit Painter  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation" href="installation.html" />
+    <link rel="prev" title="What is Circuit Painter?" href="introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            Circuit Painter
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="introduction.html">What is Circuit Painter?</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Core concepts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#pcb-layers">PCB layers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#taxonomy-of-objects">Taxonomy of objects</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#object-attribues">Object attribues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#drawing-coordinates">Drawing coordinates</a></li>
+</ul>
+</li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting_started.html">Getting Started Tutorial</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples.html">Example Projects</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Advanced topics</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="advanced_usage.html">Advanced Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="notes.html">Additional Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">Function Reference</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">External links</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference external" href="https://github.com/blinkinlabs/circuitpainter">Source Code on Github</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://pypi.org/project/circuitpainter/">PyPi Project</a></li>
+<li class="toctree-l1"><a class="reference external" href="https://blinkinlabs.com">Blinkinlabs</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Circuit Painter</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Core concepts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/concepts.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="core-concepts">
+<h1>Core concepts<a class="headerlink" href="#core-concepts" title="Link to this heading"></a></h1>
+<p>Circuit Painter works by drawing objects onto PCB layers.</p>
+<section id="pcb-layers">
+<h2>PCB layers<a class="headerlink" href="#pcb-layers" title="Link to this heading"></a></h2>
+<p>There are a lot of layers that make up a PCB! Fortunately, we only need to
+focus on a few of them:</p>
+<ul class="simple">
+<li><p>Edge cuts</p></li>
+<li><p>Top silkscreen</p></li>
+<li><p>Top soldermask</p></li>
+<li><p>Top copper</p></li>
+<li><p>Bottom copper</p></li>
+<li><p>Bottom soldermask</p></li>
+<li><p>Bottom silkscreen</p></li>
+</ul>
+<p>In Circuit Painter, you set the active drawing layer by calling the layer()
+function:</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">painter</span><span class="o">.</span><span class="n">layer</span><span class="p">(</span><span class="s1">&#39;F_Cu&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Any objects created afterwards will be drawn on that layer, until it is
+updated by another layer() call. Note that some objects, particularly the
+conductive ones, can only be placed on a copper layer.</p>
+</section>
+<section id="taxonomy-of-objects">
+<h2>Taxonomy of objects<a class="headerlink" href="#taxonomy-of-objects" title="Link to this heading"></a></h2>
+<p>Circuit Painter allows you to create two categories of objects- conductive,
+and non-conductive. Conductive objects are used to carry electricity, and
+are assigned to ‘nets’. Non-conductive objects are used for making graphics,
+markings, and defining the board outline.</p>
+<p>Conductive:</p>
+<ul class="simple">
+<li><p>Tracks</p></li>
+<li><p>Arc Tracks</p></li>
+<li><p>Polygons</p></li>
+<li><p>Footprints</p></li>
+<li><p>Vias</p></li>
+</ul>
+<p>Non-Conductive:</p>
+<ul class="simple">
+<li><p>Lines</p></li>
+<li><p>Arcs</p></li>
+<li><p>Cirles</p></li>
+<li><p>Polygons</p></li>
+<li><p>Rect</p></li>
+<li><p>Text</p></li>
+</ul>
+</section>
+<section id="object-attribues">
+<h2>Object attribues<a class="headerlink" href="#object-attribues" title="Link to this heading"></a></h2>
+<p>Many objects have attributes that need to be set when calling them. For
+example, the width of a line or track is set by the width() function.</p>
+<p>Global attributes are:</p>
+<ul class="simple">
+<li><p>width</p></li>
+<li><p>fill / no fill</p></li>
+<li><p>layer</p></li>
+<li><p>designators / no designators</p></li>
+</ul>
+</section>
+<section id="drawing-coordinates">
+<h2>Drawing coordinates<a class="headerlink" href="#drawing-coordinates" title="Link to this heading"></a></h2>
+<p>Circuit Painter features a virtual transformation matrix, to make scripting
+similar arrangements of objects anywhere on a board. It supports both linear
+and rotational transformations for all objects, allowing for example LEDs to
+be aligned around a circle.</p>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="introduction.html" class="btn btn-neutral float-left" title="What is Circuit Painter?" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="installation.html" class="btn btn-neutral float-right" title="Installation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024 Blinkinlabs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
