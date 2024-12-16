@@ -173,7 +173,7 @@ To make a complete board, here is the [rest of the owl](https://knowyourmeme.com
 	.. code:: python
 	
 		from circuitpainter import CircuitPainter
-		painter = CircuitPainter()
+		p = CircuitPainter()
 		
 		p.no_designators() # Don't show reference designator names on the board silkscreen
 		p.layer('F_Cu')
