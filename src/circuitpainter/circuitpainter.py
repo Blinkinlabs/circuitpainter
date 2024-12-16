@@ -11,6 +11,8 @@ from tempfile import TemporaryDirectory
 import zipfile
 import pcbnew
 from circuitpainter.transform_matrix import TransformMatrix
+import shutil
+
 
 # References:
 # /usr/lib/python3/dist-packages/pcbnew.py
@@ -24,11 +26,17 @@ def _guess_footprint_library_path():
     system = platform.system()
 
     if system == "Linux":
-        return "/usr/share/kicad/footprints"
+        footprint_path = "/usr/share/kicad/footprints"
     elif system == "Windows":
-        return "C:\\Program Files\\KiCad\\7.0\\share\\kicad\\footprints"
+        kicad_path = Path(shutil.which('kicad'))
+        footprint_path = f"{kicad_path.parents[1]}\\share\\kicad\\footprints"
     else:
-        return
+        raise OSError('Could not guess KiCad footprint library location, please specify manually')
+
+    if not Path(footprint_path).is_dir():
+        raise OSError(f"Autodetected KiCad footprint library: {footprint_path} does not exist, please specify manually")
+
+    return footprint_path
 
 def _make_zip(output_name, filenames):
     """Create a zip file
