@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Circuit Painter</title>
+
+    <link rel="stylesheet" href="/static/style.css">    
+
+    <script type="text/javascript" src="/static/lotus_leds.js"></script>
+
+</head>
+
+<body>
+    <div>
+        <form>
+            <label for="param-leds">LEDs:</label>
+            <input type="range" min="1" max="30" value="9" class="slider" id="param-leds">
+            <br/>
+            <label for="param-radius">Radius:</label>
+            <input type="range" min="15" max="50" value="18" class="slider" id="param-radius">
+            <br/>
+            <label for="param-led-radius-percent">LED arc radius:</label>
+            <input type="range" min=".5" max="2" value=".7" step="0.05" class="slider" id="param-led-radius-percent">
+        </form>
+
+        <div>
+            <img id='svg-preview' src="" style="width: 100%;">
+        </div>
+    </div>
+
+    <script>
+        window.onload = function () {
+            lotus_leds();
+        };
+    </script>
+</body>
+
+</html>

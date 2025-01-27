@@ -1,0 +1,45 @@
+:root {
+    --banner-background: #000000;
+    --banner-foreground: #ffffff;
+    --body-background: #e6e4f4;
+  
+    --tab-hover: #ddd;
+    --tab-selected: #ccc;
+    --tab-deselected: #f1f1f1;
+    --tab-background: #ffffff;
+  
+    --form-background: #f9f9f9;
+    --form-border: #c1c1c1;
+  
+    --input-focus: #9abcea;
+    --input-border: #9c9c9c;
+  }
+  
+  body {
+    background-color: var(--body-background);
+    margin: 0px;
+  
+    font-family: "Roboto", sans-serif;
+  }
+  
+  
+  label {
+    font-size: 16px;
+    font-weight: bold;
+  }
+  
+  input {
+    background: #fff;
+    border: 1px solid var(--input-border);
+  
+    padding: 0.7em;
+    margin-bottom: 0.5rem;
+  }
+  
+  input:focus {
+    outline: 3px solid var(--input-focus);
+  }
+  
+  label {
+    padding: 0.5em 0.5em 0.5em 0;
+  }
