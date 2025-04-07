@@ -379,7 +379,7 @@ class CircuitPainter:
         via = pcbnew.PCB_VIA(self.pcb)
         via.SetPosition(self._local_to_world(x, y))
         via.SetDrill(pcbnew.FromMM(d))
-        via.SetWidth(pcbnew.FromMM(w))
+        via.SetFrontWidth(pcbnew.FromMM(w)) # Note: we assume the via is in 'normal' mode
         if net is not None:
             via.SetNet(self._find_net(net))
 
@@ -716,8 +716,8 @@ class CircuitPainter:
         dim.SetHeight(pcbnew.FromMM(height))
 
         dim.SetPrecision(pcbnew.DIM_PRECISION_X_XX)
-        dim.SetUnits(pcbnew.EDA_UNITS_MILLIMETRES)
-        dim.SetUnitsMode(pcbnew.DIM_UNITS_MODE_MILLIMETRES)
+        dim.SetUnits(pcbnew.EDA_UNITS_MM)
+        dim.SetUnitsMode(pcbnew.DIM_UNITS_MODE_MM)
 
         return self._add_item(dim)
 
@@ -734,7 +734,7 @@ class CircuitPainter:
             pcbnew.WriteDRCReport(
                 self.pcb,
                 f"{self.tempdir.name}/.drc",
-                pcbnew.EDA_UNITS_MILLIMETRES,
+                pcbnew.EDA_UNITS_MM,
                 False)
             self.is_drc_run = True
 
@@ -790,7 +790,7 @@ class CircuitPainter:
 #        pcbnew.WriteDRCReport(
 #            self.pcb,
 #            f"{filename}_drc.txt",
-#            pcbnew.EDA_UNITS_MILLIMETRES,
+#            pcbnew.EDA_UNITS_MM,
 #            False)
 
     def export_gerber(self, name, output_dir='.', layers=[]):
