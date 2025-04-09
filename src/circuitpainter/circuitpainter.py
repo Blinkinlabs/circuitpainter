@@ -780,18 +780,20 @@ class CircuitPainter:
             self.save(f"{tmpdir}/preview")
             subprocess.check_call(["pcbnew", f"{tmpdir}/preview.kicad_pcb"])
 
-#    def drc(self, filename):
-#        """ Run the DRC tool, and save the output to a file
-#
-#        filename: Name of DRC file to write
-#        """
-#        self._fill_zones()
-#
-#        pcbnew.WriteDRCReport(
-#            self.pcb,
-#            f"{filename}_drc.txt",
-#            pcbnew.EDA_UNITS_MM,
-#            False)
+    def drc(self, name, output_dir='.'):
+        """ Run the DRC tool, and save the output to a file
+
+        filename: Name of DRC file to write
+        """
+        self._fill_zones()
+
+        output_dir = Path(output_dir).resolve()
+
+        pcbnew.WriteDRCReport(
+            self.pcb,
+            f"{output_dir}/{name}_drc.txt",
+            pcbnew.EDA_UNITS_MM,
+            False)
 
     def export_gerber(self, name, output_dir='.', layers=[]):
         """ Export the design to gerbers / drill file
