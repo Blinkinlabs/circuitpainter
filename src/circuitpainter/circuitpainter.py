@@ -949,3 +949,34 @@ class CircuitPainter:
 
             shutil.copyfile(f"{tmpdir_kicad}/{name}_pos.csv",
                             f"{output_dir}/{name}_pos.csv")
+
+    def export_render(self, name, output_dir='.', rotation=[0,0,0]):
+        """ Export a board render
+
+        This saves the file to a temporary loation, uses the kicad command
+        line interface to make a render render, then copies it to the specified
+        location
+
+        :param name: Name of output file
+        :param directory: (optional) Directory to place the file in
+        """
+        self._fill_zones()
+        self._auto_set_origin()
+
+        output_dir = Path(output_dir).resolve()
+
+        with TemporaryDirectory() as tmpdir_kicad:
+            # Write the kicad pcb out to a temporary location
+            self.save(f"{tmpdir_kicad}/{name}")
+
+            subprocess.check_call(["kicad-cli",
+                                   "pcb",
+                                   "render",
+                                   "--quality","high",
+                                   "--rotate",','.join([str(r) for r in rotation]),
+                                   "--output", f"{name}.png",
+                                   f"{tmpdir_kicad}/{name}.kicad_pcb"],
+                                  cwd=tmpdir_kicad)
+
+            shutil.copyfile(f"{tmpdir_kicad}/{name}.png",
+                            f"{output_dir}/{name}.png")
