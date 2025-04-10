@@ -911,6 +911,13 @@ class CircuitPainter:
                                    "export",
                                    "step",
                                    "--drill-origin",
+                                   "--include-tracks",
+                                   "--include-pads",
+                                   "--include-zones",
+                                   "--include-inner-copper",
+                                   "--include-silkscreen",
+                                   "--include-soldermask",
+                                   "--fuse-shapes",
                                    "--output", f"{name}.step",
                                    f"{tmpdir_kicad}/{name}.kicad_pcb"],
                                   cwd=tmpdir_kicad)
