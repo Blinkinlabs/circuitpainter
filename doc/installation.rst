@@ -101,8 +101,10 @@ and activate it. Note that you need to use the option '--system-site-packages',
 so that Circuit Painter can find the version of KiCad installed by your package
 manager:
 
-    python3 -m venv --system-site-packages venv
-    . venv/bin/activate
+    .. code:: bash
+
+        python3 -m venv --system-site-packages venv
+        . venv/bin/activate
 
 .. image:: _static/images/install_linux_venv.png
   :width: 600
