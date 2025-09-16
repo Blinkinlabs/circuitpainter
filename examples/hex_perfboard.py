@@ -40,6 +40,7 @@ def HexPerfboard(count,spacing,hole_d,ring_d):
     # Center via
     UntentedVia(painter,0,0,hole_d,ring_d)
 
+    translateX, translateY = spacing*math.cos(math.radians(60)),-spacing*math.sin(math.radians(60))
     # Draw the hex grid, 1/6th at a time:
     for rotation in range(0,360,60):
         painter.push_matrix();
@@ -49,7 +50,7 @@ def HexPerfboard(count,spacing,hole_d,ring_d):
             for x in range(0,count-y):
                 UntentedVia(painter, x*spacing,0,hole_d,ring_d)
 
-            painter.translate(spacing*math.cos(math.radians(60)),-spacing*math.sin(math.radians(60)))
+            painter.translate(translateX, translateY)
 
         painter.pop_matrix();
 
