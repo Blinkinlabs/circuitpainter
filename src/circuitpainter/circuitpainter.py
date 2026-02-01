@@ -655,6 +655,7 @@ class CircuitPainter:
             y,
             message,
             angle=0,
+            size=1.27,
             mirrored=False,
             bold=False,
             italic=False,
@@ -683,6 +684,7 @@ class CircuitPainter:
                 self.transform.get_angle() +
                 angle,
                 pcbnew.DEGREES_T))
+        text.SetTextSize(pcbnew.VECTOR2I_MM(size,size))
         text.SetMirrored(mirrored)
         text.SetBold(bold)
         text.SetItalic(italic)
