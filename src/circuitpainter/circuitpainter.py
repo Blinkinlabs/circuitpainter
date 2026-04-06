@@ -692,7 +692,7 @@ class CircuitPainter:
 
         return self._add_item(text)
 
-    def dimension(self, x1, y1, x2, y2, height):
+    def dimension(self, x1, y1, x2, y2, height, unit='mm'):
         """ Draw a linear dimension line
 
         Dimension lines can be used to document importanat sizes or spacings
@@ -709,7 +709,16 @@ class CircuitPainter:
         :param x2: ending point (mm)
         :param y2: ending point (mm)
         :param height: Spacing between measured points and dimension line
+        :param unit: Display unit for the dimension ('inch', 'mm', 'mils', 'um', 'cm')
         """
+
+        unit_options = {
+            'inch': pcbnew.EDA_UNITS_INCH,
+            'mm': pcbnew.EDA_UNITS_MM,
+            'mils': pcbnew.EDA_UNITS_MILS,
+            'um': pcbnew.EDA_UNITS_UM,
+            'cm': pcbnew.EDA_UNITS_CM,
+        }
 
         dim = pcbnew.PCB_DIM_ALIGNED(self.pcb, pcbnew.PCB_DIM_ALIGNED_T)
 
@@ -718,8 +727,7 @@ class CircuitPainter:
         dim.SetHeight(pcbnew.FromMM(height))
 
         dim.SetPrecision(pcbnew.DIM_PRECISION_X_XX)
-        dim.SetUnits(pcbnew.EDA_UNITS_MM)
-        dim.SetUnitsMode(pcbnew.DIM_UNITS_MODE_MM)
+        dim.SetUnits(unit_options[unit])
 
         return self._add_item(dim)
 
